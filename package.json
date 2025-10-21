@@ -1,0 +1,41 @@
+{
+  "name": "untitled",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "ci": "yarn turbo run //#format-check lint typecheck --log-order=grouped",
+    "clean": "rm -rf node_modules packages/eslint-config/node_modules apps/mobile/node_modules apps/web/node_modules",
+    "codegen": "turbo run codegen --log-order=grouped",
+    "dev:mobile": "yarn workspace @untitled/mobile dev",
+    "dev:web": "yarn workspace @untitled/web dev",
+    "format": "prettier --experimental-cli --write '**/*.{md,json,js,ts,tsx}'",
+    "format-check": "prettier --experimental-cli --check '**/*.{md,json,js,ts,tsx}'",
+    "postinstall": "yarn-deduplicate && patch-package",
+    "lint": "turbo run lint --log-order=grouped",
+    "sherif": "sherif --fix",
+    "sherif-check": "sherif",
+    "typecheck": "turbo run typecheck --log-order=grouped"
+  },
+  "resolutions": {
+    "babel-plugin-react-compiler": "1.0",
+    "lightningcss": "1.30.1",
+    "react": "19.1.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.7.0",
+    "@prettier/plugin-oxc": "0.0.4",
+    "patch-package": "8.0.1",
+    "prettier": "3.6.2",
+    "prettier-plugin-packagejson": "2.5.19",
+    "prettier-plugin-tailwindcss": "0.7.1",
+    "sherif": "1.6.1",
+    "turbo": "2.5.8",
+    "yarn-deduplicate": "6.0.2"
+  },
+  "packageManager": "yarn@1.22.22"
+}

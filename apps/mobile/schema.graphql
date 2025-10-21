@@ -1,0 +1,140 @@
+"""
+Indicates exactly one field must be supplied and this field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
+Exposes a URL that specifies the behavior of this scalar.
+"""
+directive @specifiedBy(
+  """
+  The URL that specifies the behavior of this scalar.
+  """
+  url: String!
+) on SCALAR
+
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """
+  Deferred when true or undefined.
+  """
+  if: Boolean! = true
+
+  """
+  Unique name
+  """
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+Directs the executor to stream plural fields when the `if` argument is true or undefined.
+"""
+directive @stream(
+  """
+  Stream when true or undefined.
+  """
+  if: Boolean! = true
+
+  """
+  Unique name
+  """
+  label: String
+
+  """
+  Number of items to return immediately
+  """
+  initialCount: Int = 0
+) on FIELD
+
+type CaughtPokemon implements Node {
+  caughtAt: String!
+  id: ID!
+  nickname: String
+  pokemon: Pokemon
+  shiny: Boolean!
+  stats: String!
+  user: User
+}
+
+type Mutation {
+  updateName(name: String!): User
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type Pokemon implements Node {
+  id: ID!
+  name: String!
+  primaryType: String!
+  secondaryType: String
+}
+
+type Query {
+  findUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    name: String!
+  ): QueryFindUsersConnection
+  node(id: ID!): Node
+  pokemon(id: ID!): Pokemon
+  user(username: String!): User
+  viewer: User
+}
+
+type QueryFindUsersConnection {
+  edges: [QueryFindUsersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type QueryFindUsersConnectionEdge {
+  cursor: String!
+  node: User
+}
+
+type User implements Node {
+  caughtPokemon(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserCaughtPokemonConnection!
+  email: String
+  id: ID!
+  locale: String
+  name: String!
+  role: String!
+  username: String
+}
+
+type UserCaughtPokemonConnection {
+  edges: [UserCaughtPokemonConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type UserCaughtPokemonConnectionEdge {
+  cursor: String!
+  node: CaughtPokemon
+}
+
+type UserConnection {
+  edges: [UserEdge]
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User
+}

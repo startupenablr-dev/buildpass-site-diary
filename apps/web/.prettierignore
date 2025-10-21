@@ -1,0 +1,3 @@
+src/app/api/graphql/schema.graphql
+src/app/api/graphql/schema.ts
+src/types/__generated__

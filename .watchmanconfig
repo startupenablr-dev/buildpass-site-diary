@@ -1,0 +1,4 @@
+{
+  "prefer_split_fsevents_watcher": true,
+  "fsevents_latency": 0.05
+}

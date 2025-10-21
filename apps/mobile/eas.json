@@ -1,0 +1,60 @@
+{
+  "cli": {
+    "version": ">= 16.1.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "production": {
+      "node": "22.18.0",
+      "autoIncrement": true,
+      "distribution": "store",
+      "env": {
+        "APP_VARIANT": "production"
+      },
+      "ios": {
+        "image": "macos-sequoia-15.6-xcode-26.0",
+        "resourceClass": "m-medium"
+      },
+      "channel": "production"
+    },
+    "development": {
+      "node": "22.18.0",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      },
+      "ios": {
+        "image": "macos-sequoia-15.6-xcode-26.0",
+        "resourceClass": "m-medium"
+      },
+      "channel": "development"
+    },
+    "development-simulator": {
+      "node": "22.18.0",
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "image": "macos-sequoia-15.6-xcode-26.0",
+        "simulator": true,
+        "resourceClass": "m-medium"
+      },
+      "env": {
+        "APP_VARIANT": "development"
+      },
+      "channel": "development-simulator"
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "dblechoc@gmail.com",
+        "ascAppId": "6752879749",
+        "appleTeamId": "8NMN526U75"
+      },
+      "android": {
+        "releaseStatus": "draft"
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.expo/
+android
+coverage
+dist/
+ios
+patches/
+yarn.lock
+web-build/
+assets/images/app.icon
+src/types/__generated__

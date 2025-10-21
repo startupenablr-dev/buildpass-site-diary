@@ -1,0 +1,101 @@
+name: 🚨 CI
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: 💍 Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: 📥 Install deps
+        run: yarn install --frozen-lockfile --network-timeout 1000000
+
+      - name: 🩻 Format check
+        run: yarn format-check
+
+  lint:
+    name: ⬣ ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: 📥 Install deps
+        run: yarn install --frozen-lockfile --network-timeout 1000000
+
+      - name: 🔬 Lint
+        run: yarn lint
+
+  typecheck:
+    name: ʦ TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: 📥 Install deps
+        run: yarn install --frozen-lockfile --network-timeout 1000000
+
+      - name: 🔎 Type check
+        run: yarn typecheck
+
+  sherif:
+    name: 👮 Sherif
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: 📥 Install deps
+        run: yarn install --frozen-lockfile --network-timeout 1000000
+
+      - name: 🩻 Sherif check
+        run: yarn sherif-check

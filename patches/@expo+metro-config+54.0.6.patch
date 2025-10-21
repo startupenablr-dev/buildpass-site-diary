@@ -1,0 +1,13 @@
+diff --git a/node_modules/@expo/metro-config/build/customizeFrame.js b/node_modules/@expo/metro-config/build/customizeFrame.js
+index 8849109..e049c19 100644
+--- a/node_modules/@expo/metro-config/build/customizeFrame.js
++++ b/node_modules/@expo/metro-config/build/customizeFrame.js
+@@ -31,7 +31,7 @@ exports.INTERNAL_CALLSITES_REGEX = new RegExp([
+     // Babel helpers that implement language features
+     'node_modules/@babel/runtime/.+\\.js$',
+     // Hide Hermes internal bytecode
+-    '/(?:InternalBytecode/)?InternalBytecode\\.js$',
++    '/(?:InternalBytecode\/)?InternalBytecode\\.js$',
+     // Block native code invocations
+     `\\[native code\\]`,
+     // Hide react-dom (web)
