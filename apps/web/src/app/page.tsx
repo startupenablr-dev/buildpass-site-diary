@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { SITE_DIARIES } from '@/graphql/queries';
 import { PreloadQuery } from '@/lib/apollo-client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 const Home: React.FC = () => {
@@ -16,7 +17,9 @@ const Home: React.FC = () => {
         </PreloadQuery>
 
         <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <Button variant="outline">Yay</Button>
+          <Button asChild>
+            <Link href="/diary">View Site Diaries</Link>
+          </Button>
         </div>
       </main>
       <footer className="row-start-3 flex flex-wrap items-center justify-center gap-[24px]">

@@ -5,6 +5,33 @@ export const SITE_DIARIES = gql`
     siteDiaries {
       id
       title
+      date
+      createdBy
+      content
+      weather {
+        temperature
+        description
+      }
+      attendees
+      attachments
+    }
+  }
+`;
+
+export const SITE_DIARY = gql`
+  query SiteDiary($id: String!) {
+    siteDiary(id: $id) {
+      id
+      title
+      date
+      createdBy
+      content
+      weather {
+        temperature
+        description
+      }
+      attendees
+      attachments
     }
   }
 `;
