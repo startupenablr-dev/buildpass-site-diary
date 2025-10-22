@@ -87,10 +87,37 @@ export function getSchema(): GraphQLSchema {
             };
         }
     });
+    const WeatherInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
+        name: "WeatherInput",
+        fields() {
+            return {
+                description: {
+                    name: "description",
+                    type: new GraphQLNonNull(GraphQLString)
+                },
+                temperature: {
+                    name: "temperature",
+                    type: new GraphQLNonNull(GraphQLInt)
+                }
+            };
+        }
+    });
     const SiteDiaryInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
         name: "SiteDiaryInput",
         fields() {
             return {
+                attachments: {
+                    name: "attachments",
+                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+                },
+                attendees: {
+                    name: "attendees",
+                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+                },
+                content: {
+                    name: "content",
+                    type: GraphQLString
+                },
                 createdBy: {
                     name: "createdBy",
                     type: new GraphQLNonNull(GraphQLString)
@@ -101,11 +128,15 @@ export function getSchema(): GraphQLSchema {
                 },
                 id: {
                     name: "id",
-                    type: new GraphQLNonNull(GraphQLString)
+                    type: GraphQLString
                 },
                 title: {
                     name: "title",
                     type: new GraphQLNonNull(GraphQLString)
+                },
+                weather: {
+                    name: "weather",
+                    type: WeatherInputType
                 }
             };
         }
@@ -132,6 +163,6 @@ export function getSchema(): GraphQLSchema {
     return new GraphQLSchema({
         query: QueryType,
         mutation: MutationType,
-        types: [SiteDiaryInputType, MutationType, QueryType, SiteDiaryType, WeatherType]
+        types: [SiteDiaryInputType, WeatherInputType, MutationType, QueryType, SiteDiaryType, WeatherType]
     });
 }

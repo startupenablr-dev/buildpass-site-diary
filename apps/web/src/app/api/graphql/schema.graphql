@@ -2,10 +2,19 @@
 # Do not manually edit. Regenerate by running `npx grats`.
 
 input SiteDiaryInput {
+  attachments: [String!]
+  attendees: [String!]
+  content: String
   createdBy: String!
   date: String!
-  id: String!
+  id: String
   title: String!
+  weather: WeatherInput
+}
+
+input WeatherInput {
+  description: String!
+  temperature: Int!
 }
 
 type Mutation {

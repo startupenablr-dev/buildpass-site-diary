@@ -33,6 +33,9 @@ export async function POST(request: NextRequest) {
       throw new Error('id, date, createdBy and title are required');
     }
 
+    // Actually save the diary to the in-memory store
+    siteDiaries.push(siteDiary);
+
     return NextResponse.json(
       { message: 'Site diary created successfully', siteDiary },
       { status: 201 },

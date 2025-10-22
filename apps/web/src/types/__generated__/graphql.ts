@@ -48,10 +48,14 @@ export type SiteDiary = {
 };
 
 export type SiteDiaryInput = {
+  attachments?: InputMaybe<Array<Scalars['String']['input']>>;
+  attendees?: InputMaybe<Array<Scalars['String']['input']>>;
+  content?: InputMaybe<Scalars['String']['input']>;
   createdBy: Scalars['String']['input'];
   date: Scalars['String']['input'];
-  id: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
   title: Scalars['String']['input'];
+  weather?: InputMaybe<WeatherInput>;
 };
 
 export type Weather = {
@@ -60,7 +64,19 @@ export type Weather = {
   temperature: Scalars['Int']['output'];
 };
 
+export type WeatherInput = {
+  description: Scalars['String']['input'];
+  temperature: Scalars['Int']['input'];
+};
+
 export type SiteDiariesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SiteDiariesQuery = { siteDiaries: Array<{ __typename: 'SiteDiary', id: string, title: string }> };
+export type SiteDiariesQuery = { siteDiaries: Array<{ __typename: 'SiteDiary', id: string, title: string, date: string, createdBy: string, content: string | null, attendees: Array<string> | null, attachments: Array<string> | null, weather: { __typename: 'Weather', temperature: number, description: string } | null }> };
+
+export type SiteDiaryQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type SiteDiaryQuery = { siteDiary: { __typename: 'SiteDiary', id: string, title: string, date: string, createdBy: string, content: string | null, attendees: Array<string> | null, attachments: Array<string> | null, weather: { __typename: 'Weather', temperature: number, description: string } | null } | null };
