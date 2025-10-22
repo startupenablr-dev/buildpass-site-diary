@@ -1,8 +1,62 @@
 # Developer Onboarding Guide - Site Diary Application
 
-**Last Updated:** October 22, 2025  
+**Last Updated:** October 23, 2025  
 **Status:** Active Development  
 **Project:** Untitled Workspace - Site Diary Management System
+
+---
+
+## 🚨 Code Modification Philosophy - READ FIRST
+
+**Before making ANY changes to this codebase:**
+
+### ✅ DO:
+
+- **Make minimal, targeted changes** - only modify what's necessary for the feature
+- **Preserve existing code structure** - if it works, leave it alone
+- **Add new files** for new features rather than modifying existing ones when possible
+- **Test incrementally** - verify each small change before moving forward
+- **Follow existing patterns** - match the style and structure already in the codebase
+- **Use optional chaining (`?.`)** - it's best practice for null safety
+- **Keep original UI/UX** - don't change layouts, footers, or styling unless specifically requested
+
+### ❌ DON'T:
+
+- **Refactor working code (unless explicitly asked)** - "improving" code that works fine introduces risk
+- **Don't touch code that's working without errors** - if no errors or bugs exist, leave it alone
+- **Don't "fix" code that isn't broken** - working code > "perfect" code
+- **Make aesthetic changes** - don't reorganize, reformat, or "clean up" unrelated code
+- **Change project structure** - don't move files or rename things without explicit need
+- **Modify multiple files unnecessarily** - scope changes tightly to the feature
+- **Remove or replace existing functionality** - preserve what exists, add alongside it
+- **Update dependencies** - unless specifically needed for the feature
+
+### 🚫 When to Refactor:
+
+**ONLY refactor when:**
+
+- ✅ The prompt explicitly asks you to refactor
+- ✅ Fixing an actual bug that requires refactoring
+- ✅ The existing code prevents implementing the requested feature
+
+**DO NOT refactor when:**
+
+- ❌ Code is working fine (no errors, no bugs)
+- ❌ Code doesn't follow "best practices" but works
+- ❌ Code could be "cleaner" or "better organized"
+- ❌ You personally think it could be improved
+- ❌ No actual issues or problems exist
+
+**Rule: If it's working and no errors exist, DON'T CHANGE IT.**
+
+### Example:
+
+**Task:** "Add a button to navigate to the diary list"
+
+- ✅ **Correct:** Add ONE button to existing page, keep everything else unchanged
+- ❌ **Wrong:** Rewrite entire page, change header/footer, update styling, reorganize layout
+
+**Remember:** Every unnecessary change is a potential bug. Minimal changes = minimal risk.
 
 ---
 

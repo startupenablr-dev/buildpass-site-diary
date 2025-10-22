@@ -7,6 +7,51 @@
 
 ---
 
+## 🚨 CRITICAL: Minimal Changes Philosophy
+
+**Before implementing any backend feature:**
+
+### Core Principles:
+
+1. **Only modify necessary files** - Don't refactor or reorganize working code
+2. **If endpoints work without errors, don't change them** - No errors = no changes
+3. **Preserve existing endpoints** - Keep API contracts unchanged unless explicitly updating them
+4. **Add new routes/resolvers** - Don't modify existing ones unless fixing a bug
+5. **Test incrementally** - Verify each change with curl/GraphiQL before proceeding
+6. **Follow existing patterns** - Match naming, structure, and error handling already in place
+
+### Backend Refactoring Policy:
+
+**ONLY refactor backend code when:**
+
+- ✅ Prompt explicitly requests refactoring
+- ✅ Fixing an actual bug or error in the API
+- ✅ Existing code prevents implementing the requested feature
+- ✅ Security vulnerability exists
+
+**DO NOT refactor when:**
+
+- ❌ API endpoints are working correctly (returning proper responses)
+- ❌ No errors or issues in logs
+- ❌ Code "could be organized better" but works
+- ❌ Validation works but "could be improved"
+- ❌ Error handling works but "could be more detailed"
+
+### Backend-Specific Guidelines:
+
+- ✅ Add new GraphQL mutations/queries alongside existing ones
+- ✅ Create new API routes in new files when possible
+- ✅ Keep data layer changes isolated and minimal
+- ❌ Don't restructure working resolvers "for better organization"
+- ❌ Don't change error handling patterns that work
+- ❌ Don't modify validation logic in unrelated endpoints
+- ❌ Don't refactor working mutations/queries
+
+**Remember:** Backend changes affect all clients. Minimal changes = minimal breaking changes.
+**Working API > "Perfect" API - Stability is priority #1.**
+
+---
+
 ## Table of Contents
 
 1. [Backend Architecture Overview](#1-backend-architecture-overview)

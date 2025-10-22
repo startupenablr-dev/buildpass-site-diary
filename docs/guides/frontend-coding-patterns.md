@@ -1,9 +1,51 @@
 # Frontend Coding Patterns & Architecture Guide
 
 **Project:** Site Diary Management System  
-**Last Updated:** October 22, 2025  
+**Last Updated:** October 23, 2025  
 **Target Audience:** New developers joining the project  
 **Purpose:** Complete reference for frontend patterns, architecture, and backend integration
+
+---
+
+## 🚨 CRITICAL: Minimal Changes Philosophy
+
+**Before implementing any frontend feature:**
+
+### Core Principles:
+
+1. **Only change what's necessary** - Don't refactor or "improve" working code
+2. **If code works without errors, leave it alone** - No errors = no changes needed
+3. **Preserve existing UI/UX** - Keep layouts, styles, and components as-is
+4. **Add, don't replace** - Create new components rather than modifying existing ones
+5. **Test each small change** - Verify functionality before moving forward
+6. **Match existing patterns** - Follow the conventions already in the codebase
+
+### Refactoring Policy:
+
+**ONLY refactor frontend code when:**
+
+- ✅ Prompt explicitly requests refactoring
+- ✅ Fixing an actual bug or error
+- ✅ Existing code blocks the new feature
+
+**DO NOT refactor when:**
+
+- ❌ Code is working fine (no errors, no console warnings)
+- ❌ Components render correctly
+- ❌ Styling looks fine but could be "better"
+- ❌ Code structure is "not ideal" but works
+- ❌ You think it could be "improved"
+
+### Common Mistakes to Avoid:
+
+- ❌ Rewriting page layouts when only adding a button
+- ❌ Changing footer/header content unnecessarily
+- ❌ Updating styling that wasn't requested
+- ❌ "Cleaning up" or reorganizing working code
+- ❌ Modifying multiple files for a single-file feature
+- ❌ Refactoring components that work perfectly fine
+
+**Rule of thumb:** If the code works and wasn't mentioned in the request, don't touch it.
 
 ---
 

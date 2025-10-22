@@ -2,6 +2,33 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: Read First
+
+**Before making ANY code changes:**
+
+🚨 **READ: `docs/CODE_MODIFICATION_RULES.md`** 🚨
+
+📦 **CHECK: `docs/guides/reusable-components-reference.md`** - Before creating new components
+
+**Key Rules:**
+
+- Make MINIMAL changes only - don't refactor or "improve" working code
+- **If code is working without errors, DON'T CHANGE IT**
+- **Only refactor when explicitly requested in the prompt**
+- **Check reusable components reference before creating new components**
+- Preserve existing UI/UX - don't change layouts, footers, or styling
+- Add new files for new features - don't modify existing ones unnecessarily
+- Follow existing patterns exactly - match the code style already present
+- Test incrementally - verify each small change before proceeding
+
+**Golden Rules:**
+
+1. If the code works and wasn't mentioned in the request, DON'T TOUCH IT.
+2. Working code without errors = NO CHANGES NEEDED.
+3. Refactor ONLY when the prompt explicitly asks to refactor.
+
+---
+
 ## Project Overview
 
 This is a Yarn v1 monorepo containing a mobile app (React Native/Expo) and a web app (Next.js) that share a GraphQL API for site diary management. The web app serves as the GraphQL backend using Grats for schema generation, while the mobile app consumes the API.
@@ -198,3 +225,46 @@ yarn sherif
 - Schema changes must be made through Grats decorators in the web app, not by manually editing `schema.ts` or `schema.graphql`
 - Run `yarn codegen` (or use Turbo) to update generated types in both apps after schema changes
 - The web app also has REST API endpoints at `/api/site-diary` for traditional HTTP operations
+
+### Next.js Image Configuration
+
+**⚠️ When using external images (Unsplash, CDN, etc.):**
+
+The Next.js Image component requires explicit configuration for external hostnames. If you encounter an error like:
+
+```
+Invalid src prop on next/image, hostname 'example.com' is not configured
+```
+
+**Solution:** Update `apps/web/next.config.ts` to whitelist the hostname using `remotePatterns`:
+
+```typescript
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
+};
+```
+
+**✅ This is the recommended best practice** as documented in the [official Next.js Image Optimization documentation](https://nextjs.org/docs/app/building-your-application/optimizing/images#remotepatterns). The `remotePatterns` configuration:
+
+- Is the modern, actively maintained API (supersedes the deprecated `domains` config)
+- Provides fine-grained security control (protocol, hostname, port, pathname)
+- Enables automatic image optimization (WebP/AVIF, responsive sizing, lazy loading)
+- Follows a secure whitelist approach
+
+**Before adding new image features:**
+
+1. Check if external images will be used (Unsplash, S3, CDN, etc.)
+2. Proactively configure `remotePatterns` in `next.config.ts`
+3. Test with actual image URLs to verify configuration
+4. Document any new image sources in this file
+
+This prevents runtime errors when users view pages with external images.
