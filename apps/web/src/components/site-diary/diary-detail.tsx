@@ -1,25 +1,60 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SITE_DIARY } from '@/graphql/queries';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { DELETE_SITE_DIARY, SITE_DIARY } from '@/graphql/queries';
 import {
   SiteDiaryQuery,
   SiteDiaryQueryVariables,
 } from '@/types/__generated__/graphql';
-import { useSuspenseQuery } from '@apollo/client/react';
-import { Calendar, Camera, User, Users } from 'lucide-react';
+import { useMutation, useSuspenseQuery } from '@apollo/client/react';
+import { Calendar, Camera, Edit2, Trash2, User, Users } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 interface DiaryDetailProps {
   id: string;
 }
 
 export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
+  const router = useRouter();
   const { data } = useSuspenseQuery<SiteDiaryQuery, SiteDiaryQueryVariables>(
     SITE_DIARY,
     { variables: { id } },
   );
+
+  const [deleteDiary, { loading: deleting }] = useMutation(DELETE_SITE_DIARY, {
+    onCompleted: () => {
+      router.push('/diary');
+    },
+    onError: (error) => {
+      console.error('Failed to delete diary:', error);
+      alert('Failed to delete diary. Please try again.');
+    },
+  });
+
+  const handleDelete = async () => {
+    try {
+      await deleteDiary({
+        variables: { id },
+      });
+    } catch (error) {
+      // Error is handled in onError
+    }
+  };
 
   if (!data.siteDiary) {
     return (
@@ -33,6 +68,45 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-3">
+        <Button
+          variant="outline"
+          size="default"
+          onClick={() => router.push(`/diary/${id}/edit`)}
+        >
+          <Edit2 className="mr-2 h-4 w-4" />
+          Edit
+        </Button>
+        
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="default" disabled={deleting}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              {deleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the
+                diary entry "{diary.title}".
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+
       <Card>
         <CardHeader>
           <div className="space-y-4">

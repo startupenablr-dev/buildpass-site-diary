@@ -3,9 +3,9 @@
  * Do not manually edit. Regenerate by running `npx grats`.
  */
 
-import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLInputObjectType } from "graphql";
+import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLInputObjectType, GraphQLBoolean } from "graphql";
 import { siteDiaries as querySiteDiariesResolver, siteDiary as querySiteDiaryResolver } from "./query";
-import { createSiteDiary as mutationCreateSiteDiaryResolver } from "./mutation";
+import { createSiteDiary as mutationCreateSiteDiaryResolver, deleteSiteDiary as mutationDeleteSiteDiaryResolver, updateSiteDiary as mutationUpdateSiteDiaryResolver } from "./mutation";
 export function getSchema(): GraphQLSchema {
     const WeatherType: GraphQLObjectType = new GraphQLObjectType({
         name: "Weather",
@@ -155,6 +155,33 @@ export function getSchema(): GraphQLSchema {
                     },
                     resolve(_source, args) {
                         return mutationCreateSiteDiaryResolver(args.input);
+                    }
+                },
+                deleteSiteDiary: {
+                    name: "deleteSiteDiary",
+                    type: new GraphQLNonNull(GraphQLBoolean),
+                    args: {
+                        id: {
+                            type: new GraphQLNonNull(GraphQLString)
+                        }
+                    },
+                    resolve(_source, args) {
+                        return mutationDeleteSiteDiaryResolver(args.id);
+                    }
+                },
+                updateSiteDiary: {
+                    name: "updateSiteDiary",
+                    type: SiteDiaryType,
+                    args: {
+                        id: {
+                            type: new GraphQLNonNull(GraphQLString)
+                        },
+                        input: {
+                            type: new GraphQLNonNull(SiteDiaryInputType)
+                        }
+                    },
+                    resolve(_source, args) {
+                        return mutationUpdateSiteDiaryResolver(args.id, args.input);
                     }
                 }
             };

@@ -19,6 +19,8 @@ input WeatherInput {
 
 type Mutation {
   createSiteDiary(input: SiteDiaryInput!): SiteDiary!
+  deleteSiteDiary(id: String!): Boolean!
+  updateSiteDiary(id: String!, input: SiteDiaryInput!): SiteDiary
 }
 
 type Query {

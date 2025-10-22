@@ -17,10 +17,23 @@ export type Scalars = {
 export type Mutation = {
   __typename: 'Mutation';
   createSiteDiary: SiteDiary;
+  deleteSiteDiary: Scalars['Boolean']['output'];
+  updateSiteDiary: Maybe<SiteDiary>;
 };
 
 
 export type MutationCreateSiteDiaryArgs = {
+  input: SiteDiaryInput;
+};
+
+
+export type MutationDeleteSiteDiaryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateSiteDiaryArgs = {
+  id: Scalars['String']['input'];
   input: SiteDiaryInput;
 };
 
@@ -69,6 +82,13 @@ export type WeatherInput = {
   temperature: Scalars['Int']['input'];
 };
 
+export type CreateSiteDiaryMutationVariables = Exact<{
+  input: SiteDiaryInput;
+}>;
+
+
+export type CreateSiteDiaryMutation = { createSiteDiary: { __typename: 'SiteDiary', id: string, title: string, date: string, createdBy: string, content: string | null, attendees: Array<string> | null, attachments: Array<string> | null, weather: { __typename: 'Weather', temperature: number, description: string } | null } };
+
 export type SiteDiariesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -80,3 +100,18 @@ export type SiteDiaryQueryVariables = Exact<{
 
 
 export type SiteDiaryQuery = { siteDiary: { __typename: 'SiteDiary', id: string, title: string, date: string, createdBy: string, content: string | null, attendees: Array<string> | null, attachments: Array<string> | null, weather: { __typename: 'Weather', temperature: number, description: string } | null } | null };
+
+export type UpdateSiteDiaryMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: SiteDiaryInput;
+}>;
+
+
+export type UpdateSiteDiaryMutation = { updateSiteDiary: { __typename: 'SiteDiary', id: string, title: string, date: string, createdBy: string, content: string | null, attendees: Array<string> | null, attachments: Array<string> | null, weather: { __typename: 'Weather', temperature: number, description: string } | null } | null };
+
+export type DeleteSiteDiaryMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type DeleteSiteDiaryMutation = { deleteSiteDiary: boolean };

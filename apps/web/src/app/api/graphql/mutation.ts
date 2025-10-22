@@ -39,3 +39,42 @@ export function createSiteDiary(input: SiteDiaryInput): SiteDiary {
 
   return newDiary;
 }
+
+/** @gqlMutationField */
+export function updateSiteDiary(
+  id: string,
+  input: SiteDiaryInput,
+): SiteDiary | null {
+  const index = siteDiaries.findIndex((diary) => diary.id === id);
+  
+  if (index === -1) {
+    return null;
+  }
+
+  // Update the diary entry
+  const updatedDiary: SiteDiary = {
+    id, // Keep the same ID
+    date: input.date,
+    createdBy: input.createdBy,
+    title: input.title,
+    content: input.content,
+    weather: input.weather as Weather | undefined,
+    attendees: input.attendees,
+    attachments: input.attachments,
+  };
+
+  siteDiaries[index] = updatedDiary;
+  return updatedDiary;
+}
+
+/** @gqlMutationField */
+export function deleteSiteDiary(id: string): boolean {
+  const index = siteDiaries.findIndex((diary) => diary.id === id);
+  
+  if (index === -1) {
+    return false;
+  }
+
+  siteDiaries.splice(index, 1);
+  return true;
+}
