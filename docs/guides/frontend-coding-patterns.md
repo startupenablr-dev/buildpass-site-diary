@@ -405,7 +405,20 @@ import {
 
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            siteDiaries: {
+              merge(existing, incoming) {
+                // Replace the existing list with the incoming list
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
     link: new HttpLink({
       uri: process.env.NEXT_PUBLIC_API_GRAPHQL_URL,
     }),
@@ -418,6 +431,21 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
 - `registerApolloClient()` → Creates server-side client for RSC
 - Returns `getClient`, `query`, `PreloadQuery` utilities
 - Used in **Server Components**
+- **Cache Configuration:** Defines type policies to handle array field merging
+
+**Cache Type Policies Explained:**
+
+Apollo Client needs to know how to merge array results when the same query is executed multiple times. Without a merge function, Apollo will warn about potential data loss. The `typePolicies` configuration tells Apollo:
+
+- For the `Query.siteDiaries` field, use a simple replacement strategy
+- `incoming` array replaces `existing` array (appropriate for full list fetches)
+- This prevents cache warnings and unnecessary network requests
+
+**When to add merge functions:**
+- ✅ Array fields that return the full list each time (like `siteDiaries`)
+- ✅ Fields that don't support pagination or filtering
+- ❌ Not needed for single object queries (like `siteDiary(id: "123")`)
+- ❌ Not needed if objects have unique `id` fields (Apollo auto-normalizes)
 
 **Usage in Server Component:**
 
@@ -464,7 +492,20 @@ const makeClient = (): ApolloClient => {
   });
 
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            siteDiaries: {
+              merge(existing, incoming) {
+                // Replace the existing list with the incoming list
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
     link: httpLink,
   });
 };
@@ -485,6 +526,7 @@ export const ApolloWrapper: React.FC<{
 - Mark as `'use client'` → Client Component
 - `makeClient` function creates fresh client instances
 - Wrapped around app in root layout
+- **Same cache configuration** as server-side client for consistency
 
 **Usage in Root Layout:**
 

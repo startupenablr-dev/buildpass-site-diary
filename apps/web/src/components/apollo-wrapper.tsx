@@ -15,7 +15,20 @@ const makeClient = (): ApolloClient => {
   });
 
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            siteDiaries: {
+              merge(existing, incoming) {
+                // Replace the existing list with the incoming list
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
     link: httpLink,
   });
 };
