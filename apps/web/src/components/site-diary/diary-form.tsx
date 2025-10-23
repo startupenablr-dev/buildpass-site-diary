@@ -125,7 +125,7 @@ export const DiaryForm: React.FC = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Title */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="title">
+        <Label htmlFor="title" className="text-base">
           Title <span className="text-destructive">*</span>
         </Label>
         <Input
@@ -134,7 +134,7 @@ export const DiaryForm: React.FC = () => {
           placeholder="e.g., Daily Progress Update"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className={errors.title ? 'border-destructive' : ''}
+          className={`h-11 text-base ${errors.title ? 'border-destructive' : ''}`}
         />
         {errors.title && (
           <p className="text-destructive text-sm">{errors.title}</p>
@@ -156,7 +156,7 @@ export const DiaryForm: React.FC = () => {
 
       {/* Creator */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="createdBy">
+        <Label htmlFor="createdBy" className="text-base">
           Created By <span className="text-destructive">*</span>
         </Label>
         <Input
@@ -167,7 +167,7 @@ export const DiaryForm: React.FC = () => {
           onChange={(e) =>
             setFormData({ ...formData, createdBy: e.target.value })
           }
-          className={errors.createdBy ? 'border-destructive' : ''}
+          className={`h-11 text-base ${errors.createdBy ? 'border-destructive' : ''}`}
         />
         {errors.createdBy && (
           <p className="text-destructive text-sm">{errors.createdBy}</p>
@@ -176,13 +176,14 @@ export const DiaryForm: React.FC = () => {
 
       {/* Description */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="content">Description</Label>
+        <Label htmlFor="content" className="text-base">Description</Label>
         <Textarea
           id="content"
           placeholder="Describe the activities and progress for the day..."
           rows={6}
           value={formData.content}
           onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+          className="min-h-[140px] text-base"
         />
         <p className="text-muted-foreground text-sm">
           Optional: Add detailed information about the site activities.
@@ -209,7 +210,7 @@ export const DiaryForm: React.FC = () => {
 
       {/* Attendees */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="attendees">Attendees</Label>
+        <Label htmlFor="attendees" className="text-base">Attendees</Label>
         <Input
           id="attendees"
           type="text"
@@ -218,6 +219,7 @@ export const DiaryForm: React.FC = () => {
           onChange={(e) =>
             setFormData({ ...formData, attendees: e.target.value })
           }
+          className="h-11 text-base"
         />
         <p className="text-muted-foreground text-sm">
           Optional: Enter names separated by commas.
@@ -243,15 +245,20 @@ export const DiaryForm: React.FC = () => {
         </div>
       )}
 
-      {/* Form Actions */}
-      <div className="flex gap-4">
-        <Button type="submit" disabled={loading} className="min-w-[150px]">
+      {/* Form Actions - Stack on mobile, side-by-side on tablet+ */}
+      <div className="flex flex-col gap-3 pt-4 sm:flex-row">
+        <Button 
+          type="submit" 
+          disabled={loading} 
+          className="w-full sm:w-auto h-11 px-6"
+        >
           {loading ? 'Creating...' : 'Create Diary Entry'}
         </Button>
         <Button
           type="button"
           variant="outline"
           onClick={() => router.push('/diary')}
+          className="w-full sm:w-auto h-11 px-6"
         >
           Cancel
         </Button>

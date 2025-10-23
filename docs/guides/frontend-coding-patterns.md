@@ -442,6 +442,7 @@ Apollo Client needs to know how to merge array results when the same query is ex
 - This prevents cache warnings and unnecessary network requests
 
 **When to add merge functions:**
+
 - ✅ Array fields that return the full list each time (like `siteDiaries`)
 - ✅ Fields that don't support pagination or filtering
 - ❌ Not needed for single object queries (like `siteDiary(id: "123")`)
@@ -457,7 +458,7 @@ const Home: React.FC = () => {
   return (
     <PreloadQuery query={SITE_DIARIES}>
       <Suspense fallback={<>Loading...</>}>
-        <ClientChild />
+        <DiaryStats />
       </Suspense>
     </PreloadQuery>
   );
@@ -627,7 +628,7 @@ import {
 import { useSuspenseQuery } from '@apollo/client/react';
 import { SITE_DIARIES } from '../graphql/queries';
 
-export const ClientChild: React.FC = () => {
+export const DiaryStats: React.FC = () => {
   const { data } = useSuspenseQuery<
     SiteDiariesQuery,
     SiteDiariesQueryVariables
@@ -772,7 +773,7 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <PreloadQuery query={SITE_DIARIES}>
-        <ClientChild />
+        <DiaryStats />
       </PreloadQuery>
     </div>
   );

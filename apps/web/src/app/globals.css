@@ -119,4 +119,22 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Mobile-first touch optimizations for field workers */
+  button,
+  a,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    /* Prevent 300ms click delay on mobile */
+    touch-action: manipulation;
+    /* Remove tap highlight on mobile browsers */
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Improve focus visibility for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
 }

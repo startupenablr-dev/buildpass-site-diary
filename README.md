@@ -65,6 +65,22 @@ yarn typecheck
 yarn codegen
 ```
 
-## More Info
+## Documentation
+
+### 📚 For Developers
+
+- **[Documentation Index](./docs/README.md)** - Start here
+- **[Layout & Mobile Optimization Guide](./docs/guides/layout-mobile-optimization-guide.md)** ⭐ **MUST READ**
+  - Essential patterns for all pages
+  - Mobile-first best practices
+  - Component usage guide
+
+### 🔧 Development Guides
+
+- [Developer Onboarding](./docs/guides/developer-onboarding.md)
+- [Frontend Coding Patterns](./docs/guides/frontend-coding-patterns.md)
+- [Reusable Components Reference](./docs/guides/reusable-components-reference.md)
+
+### 📖 More Info
 
 For a comprehensive reference including architecture details, development workflows, and all available commands, see [CLAUDE.md](./CLAUDE.md).

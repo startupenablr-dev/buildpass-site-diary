@@ -1,7 +1,9 @@
 import { DiaryEditForm } from '@/components/site-diary/diary-edit-form';
 import { Button } from '@/components/ui/button';
+import { PageContainer, PageHeader } from '@/components/layout';
 import { SITE_DIARY } from '@/graphql/queries';
 import { PreloadQuery } from '@/lib/apollo-client';
+import { X } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -13,13 +15,19 @@ const DiaryEditPage: React.FC<DiaryEditPageProps> = async ({ params }) => {
   const { id } = await params;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Edit Diary Entry</h1>
-        <Button asChild variant="outline">
-          <Link href={`/diary/${id}`}>Cancel</Link>
-        </Button>
-      </div>
+    <PageContainer maxWidth="2xl">
+      <PageHeader
+        title="Edit Diary Entry"
+        description="Update site activities, weather conditions, and progress."
+        actions={
+          <Button asChild variant="outline" className="w-full sm:w-auto h-11">
+            <Link href={`/diary/${id}`}>
+              <X className="mr-2 size-4" />
+              Cancel
+            </Link>
+          </Button>
+        }
+      />
 
       <PreloadQuery query={SITE_DIARY} variables={{ id }}>
         <Suspense
@@ -32,7 +40,7 @@ const DiaryEditPage: React.FC<DiaryEditPageProps> = async ({ params }) => {
           <DiaryEditForm id={id} />
         </Suspense>
       </PreloadQuery>
-    </div>
+    </PageContainer>
   );
 };
 

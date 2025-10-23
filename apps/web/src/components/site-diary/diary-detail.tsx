@@ -67,22 +67,26 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
   const { siteDiary: diary } = data;
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
-      {/* Action Buttons */}
-      <div className="flex justify-end gap-3">
+    <div className="space-y-6">
+      {/* Action Buttons - Mobile-friendly layout */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <Button
           variant="outline"
-          size="default"
           onClick={() => router.push(`/diary/${id}/edit`)}
+          className="w-full sm:w-auto h-11 px-6"
         >
-          <Edit2 className="mr-2 h-4 w-4" />
+          <Edit2 className="mr-2 size-4" />
           Edit
         </Button>
         
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="default" disabled={deleting}>
-              <Trash2 className="mr-2 h-4 w-4" />
+            <Button 
+              variant="destructive" 
+              disabled={deleting}
+              className="w-full sm:w-auto h-11 px-6"
+            >
+              <Trash2 className="mr-2 size-4" />
               {deleting ? 'Deleting...' : 'Delete'}
             </Button>
           </AlertDialogTrigger>
@@ -110,7 +114,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
       <Card>
         <CardHeader>
           <div className="space-y-4">
-            <CardTitle className="text-3xl">{diary.title}</CardTitle>
+            <CardTitle className="text-2xl sm:text-3xl">{diary.title}</CardTitle>
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />

@@ -6,26 +6,83 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Before making ANY code changes:**
 
-🚨 **READ: `docs/CODE_MODIFICATION_RULES.md`** 🚨
+### � Required Reading (IN ORDER)
 
-📦 **CHECK: `docs/guides/reusable-components-reference.md`** - Before creating new components
+1. �🚨 **[CODE_MODIFICATION_RULES.md](docs/CODE_MODIFICATION_RULES.md)** - Core rules
+2. ⭐ **[Layout & Mobile Optimization Guide](docs/guides/layout-mobile-optimization-guide.md)** - PRIMARY REFERENCE
+3. 📦 **[Reusable Components Reference](docs/guides/reusable-components-reference.md)** - Before creating components
+4. 📚 **[Documentation Index](docs/README.md)** - All available guides
 
-**Key Rules:**
+### 🎯 Golden Rules
 
-- Make MINIMAL changes only - don't refactor or "improve" working code
-- **If code is working without errors, DON'T CHANGE IT**
-- **Only refactor when explicitly requested in the prompt**
-- **Check reusable components reference before creating new components**
-- Preserve existing UI/UX - don't change layouts, footers, or styling
-- Add new files for new features - don't modify existing ones unnecessarily
-- Follow existing patterns exactly - match the code style already present
-- Test incrementally - verify each small change before proceeding
+1. **If code works without errors, DON'T CHANGE IT**
+2. **Make MINIMAL changes only** - don't refactor or "improve" working code
+3. **Only refactor when explicitly requested** in the prompt
+4. **Always check guides first** before implementing anything
+5. **Test incrementally** - verify each small change before proceeding
 
-**Golden Rules:**
+### ✅ Before Any Change
 
-1. If the code works and wasn't mentioned in the request, DON'T TOUCH IT.
-2. Working code without errors = NO CHANGES NEEDED.
-3. Refactor ONLY when the prompt explicitly asks to refactor.
+- [ ] Read the relevant guide (layout, components, patterns)
+- [ ] Check if reusable component exists before creating new one
+- [ ] Verify naming conventions (descriptive, not generic)
+- [ ] Ensure mobile-first approach (touch targets, text sizing)
+- [ ] Preserve existing UI/UX unless explicitly requested to change
+
+### 🏗️ Best Practices
+
+#### Naming Conventions
+
+**✅ DO:**
+
+```tsx
+// Descriptive component names
+(DiaryStats.tsx, DiaryForm.tsx, DiaryList.tsx);
+
+// Descriptive function names
+function formatDiaryDate() {}
+function validateDiaryEntry() {}
+
+// Descriptive variable names
+const isFormValid = true;
+const diaryEntryCount = 5;
+```
+
+**❌ DON'T:**
+
+```tsx
+// Generic, meaningless names
+(ClientChild.tsx, Helper.tsx, Utils.tsx);
+
+// Generic function names
+function doStuff() {}
+function handler() {}
+
+// Single letter or unclear names
+const x = true;
+const data = 5;
+```
+
+#### File Organization
+
+- Component files match their export: `DiaryStats.tsx` exports `DiaryStats`
+- Use kebab-case for file names: `diary-stats.tsx`
+- Group related files: `site-diary/diary-form.tsx`, `site-diary/diary-list.tsx`
+
+#### Mobile-First
+
+- **ALWAYS use reusable layout components**: `PageContainer`, `PageHeader`
+- **Default button/input sizes are mobile-optimized** (h-11, 44px)
+- **Keep text-base (16px) on inputs** to prevent iOS zoom
+- **Touch targets minimum 44px** (already default in components)
+
+#### Code Quality
+
+- Remove unused imports, files, and code
+- Use TypeScript types, avoid `any`
+- Follow existing patterns in the codebase
+- Keep functions small and focused
+- Write self-documenting code (good names > comments)
 
 ---
 
