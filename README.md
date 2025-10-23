@@ -89,7 +89,7 @@ git add .       # Stage fixes
 git commit -m "your message"
 ```
 
-📖 See [Pre-Commit Hooks Documentation](./docs/PRE-COMMIT-HOOKS.md) for details.
+📖 See [Pre-Commit Hooks Documentation](./docs/guides/pre-commit-hooks.md) for details.
 
 ---
 

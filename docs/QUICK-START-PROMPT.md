@@ -31,22 +31,32 @@ Please review these documents:
 **Essential:**
 
 - `CLAUDE.md` - Project overview and commands
+- `docs/guides/code-modification-rules.md` - Critical coding rules (MUST READ)
 - `docs/guides/developer-onboarding.md` - Architecture and known issues
+- `docs/guides/layout-mobile-optimization-guide.md` - Layout patterns (PRIMARY REFERENCE)
 
 **For Implementation:**
 
 - `docs/guides/backend-coding-patterns.md` - Backend patterns
 - `docs/guides/frontend-coding-patterns.md` - Frontend patterns
+- `docs/guides/reusable-components-reference.md` - UI components
+- `docs/guides/ai-openai-integration.md` - AI features (if working with AI)
 - `docs/analysis/site-diary-implementation-analysis.md` - Current issues
 - `docs/analysis/site-diary-implementation-fixes.md` - Example solutions
+
+**Project Management:**
+
+- `docs/guides/pre-commit-hooks.md` - Automated quality checks
+- `docs/README.md` - Documentation index
 
 **Requirements:**
 
 - Follow patterns from the guides
 - Maintain type safety
-- If GraphQL schema changes: run `yarn grats && yarn codegen`
+- If GraphQL schema changes: run `yarn workspace @untitled/web grats && yarn codegen`
 - Test your changes
 - **Update relevant guides when changing code patterns or adding new features**
+- **Create analysis documents** (`docs/analysis/{{ name }}.md`) for deep investigations, root cause analysis, architectural decisions, and proposed solutions
 
 **Please:**
 
@@ -113,7 +123,7 @@ Store the status in the backend and make sure it persists.
 **Result:** Claude will:
 
 - Identify this needs both backend and frontend
-- **Backend:** Add status field to SiteDiary type, update mutations, run `yarn grats`
+- **Backend:** Add status field to SiteDiary type, update mutations, run `yarn workspace @untitled/web grats`
 - **Type Gen:** Run `yarn codegen` to generate types
 - **Frontend:** Add status badge to list, add dropdown to detail page, add filter UI
 - Explain the complete workflow
@@ -130,15 +140,41 @@ Add a delete button to each diary card in the list. When clicked, show a confirm
 
 **Result:** Claude will:
 
-- Check if delete mutation exists (it doesn't)
-- **Backend:** Add deleteSiteDiary mutation, run `yarn grats`
-- **Type Gen:** Run `yarn codegen`
-- **Frontend:** Add delete button, add confirmation dialog, wire up mutation
+- Check if delete mutation exists (it does! ✅)
+- **Frontend:** Add delete button, add confirmation dialog, wire up existing mutation
 - Show how to test
+
+**Note:** The project now has full CRUD operations (Create, Read, Update, Delete) implemented with AI-powered summaries!
 
 ---
 
-## 🎯 Tips for Better Results
+## � Current Project Features
+
+**Already Implemented (October 2025):**
+
+✅ **Full CRUD Operations** - Create, Read, Update, Delete site diaries  
+✅ **AI-Powered Summaries** - OpenAI integration with rate limiting  
+✅ **Mobile-First Design** - Responsive layouts and touch-optimized UI  
+✅ **GraphQL API** - Type-safe API with Grats schema generation  
+✅ **Pre-Commit Hooks** - Automated ESLint + Prettier on every commit  
+✅ **Image Support** - URL-based image attachments  
+✅ **Weather Tracking** - Temperature and condition fields  
+✅ **Date Picker** - Calendar component for date selection  
+✅ **Reusable Components** - Consistent UI with shadcn/ui
+
+**Technologies:**
+
+- Next.js 15 with App Router
+- TypeScript 5.9
+- Apollo Client v4
+- GraphQL with Grats
+- Tailwind CSS
+- shadcn/ui components
+- OpenAI API integration
+
+---
+
+## �🎯 Tips for Better Results
 
 ### ✅ Do This:
 
@@ -163,10 +199,11 @@ When you use the Universal Template, Claude automatically:
 2. **Analyzes** whether it needs backend, frontend, or both
 3. **References** the appropriate guide documents
 4. **Follows** established patterns from the codebase
-5. **Handles** the type generation workflow if needed
+5. **Handles** the type generation workflow if needed (Grats → Codegen)
 6. **Provides** complete, working code
 7. **Explains** what changed and why
 8. **Shows** how to test it
+9. **Checks pre-commit hooks** will auto-validate on commit
 
 ### You Don't Need To:
 
@@ -174,16 +211,18 @@ When you use the Universal Template, Claude automatically:
 ❌ Specify which files to edit  
 ❌ Remember the Grats/codegen workflow  
 ❌ Choose which template to use  
-❌ Attach specific documentation
+❌ Attach specific documentation  
+❌ Worry about code formatting (pre-commit hooks handle it)
 
 ### Claude Handles:
 
 ✅ Layer identification  
 ✅ File selection  
 ✅ Pattern consistency  
-✅ Type generation workflow  
+✅ Type generation workflow (`yarn workspace @untitled/web grats && yarn codegen`)  
 ✅ Testing guidance  
-✅ Documentation updates for new patterns
+✅ Documentation updates for new patterns  
+✅ ESLint and code quality checks
 
 ---
 
@@ -197,12 +236,22 @@ When implementing changes, Claude will also:
 - **Update API references** when endpoints change
 - **Maintain consistency** between code and documentation
 
-**Which guides get updated:**
+**Which docs get created/updated:**
+
+**Guides (docs/guides/):**
 
 - `backend-coding-patterns.md` - New backend patterns, API changes
 - `frontend-coding-patterns.md` - New UI patterns, component examples
 - `api-endpoints-reference.md` - API endpoint changes
-- `site-diary-implementation-analysis.md` - Known issues and solutions
+- `ai-openai-integration.md` - AI features and integration patterns
+
+**Analysis (docs/analysis/):**
+
+- Create new files for deep dive investigations: `docs/analysis/{{ descriptive-name }}.md`
+- Update existing analysis documents with new findings
+- Document root causes, trade-offs, architectural decisions, and **proposed solutions**
+- Include implementation recommendations with pros/cons
+- Examples: `site-diary-implementation-analysis.md`, `site-diary-implementation-fixes.md`
 
 ---
 
@@ -230,7 +279,7 @@ Claude will provide code and testing steps. Follow them!
 
 ---
 
-## 📚 When to Use Advanced Templates
+## 📚 When to Use Which Template
 
 **Use the Universal Template for:**
 
@@ -240,14 +289,22 @@ Claude will provide code and testing steps. Follow them!
 - UI components
 - API endpoints
 - Full-stack features
+- Quick implementations
+
+**Use the Deep Dive Analysis Template for:**
+
+- Complex bugs requiring investigation
+- Performance issues needing profiling
+- Architecture decisions and trade-offs
+- Root cause analysis
+- When you need detailed documentation of findings
+- Before major refactoring (understand first, then refactor)
 
 **Use Specialized Templates only for:**
 
 - Major architectural refactoring
 - Complex multi-phase features with many dependencies
 - When you need extra structure for planning
-
-**Location:** See `docs/claude-prompt-template.md` for specialized templates
 
 ---
 
@@ -264,10 +321,11 @@ Before submitting:
 After receiving code:
 
 - [ ] Understand what files changed
-- [ ] Run any needed commands (yarn grats, yarn codegen)
+- [ ] Run any needed commands (`yarn workspace @untitled/web grats && yarn codegen` for schema changes)
 - [ ] Test the changes
 - [ ] Verify it works as expected
 - [ ] Check that relevant guides were updated (if applicable)
+- [ ] Commit code (pre-commit hooks will auto-check formatting and linting)
 
 ---
 
@@ -313,6 +371,62 @@ Fix the GraphQL createSiteDiary mutation - it returns data but doesn't actually 
 Add weather icons to the diary cards instead of just showing text.
 ```
 
+### Deep Dive Analysis
+
+```markdown
+## 📝 What I Want
+
+I need you to do a deep dive analysis on [specific issue/feature/problem].
+
+## 📋 Analysis Requirements
+
+**Investigation Focus:**
+[What specific aspect needs deep analysis - performance, architecture, bug root cause, etc.]
+
+**Current Behavior:**
+[What's happening now]
+
+**Expected Behavior:**
+[What should happen]
+
+**Context:**
+[Any relevant background, constraints, or previous attempts]
+
+## 📊 Deliverables Required
+
+1. **Analysis Document**: Store your hyper-detailed findings in a markdown file:
+   - Path: `docs/analysis/{{ descriptive-name }}.md`
+   - Include: Root cause analysis, architectural considerations, trade-offs, **proposed solutions**, and recommendations
+   - Format: Structured with clear sections (Problem, Analysis, Findings, Proposed Solutions, Recommendations, Implementation Notes)
+
+2. **Implementation Plan**: If applicable, provide step-by-step implementation approach with multiple solution options
+
+3. **Code Examples**: Show specific code patterns or solutions for each proposed approach
+
+**Please:**
+
+1. Investigate thoroughly across the codebase
+2. Document all findings in the analysis file
+3. Provide clear recommendations with pros/cons
+4. Include code examples where applicable
+5. Reference related files and patterns
+```
+
+**Result:** Claude will:
+
+- Conduct thorough investigation of the issue
+- Analyze relevant code, patterns, and architecture
+- Create comprehensive analysis document in `docs/analysis/` folder
+- Include root cause analysis, findings, **proposed solutions**, and recommendations
+- Present multiple solution options with trade-offs (pros/cons)
+- Provide actionable implementation steps for each solution
+- Show code examples and references
+
+**Example Analysis Documents:**
+
+- `docs/analysis/site-diary-implementation-analysis.md` - Known issues and patterns
+- `docs/analysis/site-diary-implementation-fixes.md` - Solution approaches
+
 ---
 
 ## 💬 Need Help?
@@ -328,7 +442,52 @@ Think about:
 Don't worry! Just describe what you want - Claude will figure it out.
 
 **Want to see more examples?**
-Check `docs/claude-prompt-template.md` for detailed examples and specialized templates.
+Check the documentation index at `docs/README.md` for all available guides.
+
+---
+
+## ⚙️ Important Commands
+
+### GraphQL Schema Changes
+
+If you modify GraphQL types or resolvers:
+
+```bash
+# Step 1: Regenerate GraphQL schema from Grats decorators
+yarn workspace @untitled/web grats
+
+# Step 2: Generate TypeScript types for both web and mobile
+yarn codegen
+```
+
+**Or use the combined command:**
+
+```bash
+yarn workspace @untitled/web grats && yarn codegen
+```
+
+### Code Quality
+
+```bash
+# Fix everything (format + lint + typecheck)
+yarn fix
+
+# Check everything (no auto-fix)
+yarn ci
+
+# Start web dev server (required for codegen)
+yarn dev:web
+```
+
+### Pre-Commit Hooks
+
+Automated checks run on every commit:
+
+- ✅ ESLint auto-fixes staged files
+- ✅ Prettier formats code
+- ❌ Blocks commit if unfixable errors
+
+See `docs/guides/pre-commit-hooks.md` for details.
 
 ---
 

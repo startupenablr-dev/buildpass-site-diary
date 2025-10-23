@@ -27,8 +27,9 @@
 ### 📋 Project Management
 
 - [Quick Start Prompt](./QUICK-START-PROMPT.md) - Daily startup
-- [Code Modification Rules](./CODE_MODIFICATION_RULES.md) - Contribution guidelines
-- [Pre-Commit Hooks](./PRE-COMMIT-HOOKS.md) - Automated code quality checks
+- [Code Modification Rules](./guides/code-modification-rules.md) - Contribution guidelines
+- [Pre-Commit Hooks](./guides/pre-commit-hooks.md) - Automated code quality checks
+- [PreloadQuery & Dynamic Rendering](./guides/preloadquery-dynamic-rendering.md) - Technical explanation
 
 ---
 
@@ -95,20 +96,24 @@ Never create manual containers. See [Layout Guide](./guides/layout-mobile-optimi
 ```
 docs/
 ├── README.md (this file)
+├── QUICK-START-PROMPT.md
 ├── guides/
 │   ├── layout-mobile-optimization-guide.md  ⭐ PRIMARY REFERENCE
+│   ├── code-modification-rules.md
+│   ├── pre-commit-hooks.md
 │   ├── developer-onboarding.md
 │   ├── frontend-coding-patterns.md
 │   ├── backend-coding-patterns.md
 │   ├── reusable-components-reference.md
+│   ├── ai-openai-integration.md
+│   ├── error-handling-reference.md
+│   ├── preloadquery-dynamic-rendering.md
 │   ├── site-diary-pages-implementation.md
 │   ├── update-delete-implementation.md
 │   └── api-endpoints-reference.md
-├── analysis/
-│   ├── site-diary-implementation-analysis.md
-│   └── site-diary-implementation-fixes.md
-├── CODE_MODIFICATION_RULES.md
-└── QUICK-START-PROMPT.md
+└── analysis/
+    ├── site-diary-implementation-analysis.md
+    └── site-diary-implementation-fixes.md
 ```
 
 ---
@@ -147,7 +152,7 @@ When working on this codebase:
 - [ ] Run `yarn fix` to format and check code
 - [ ] Pre-commit hooks will auto-check on commit
 
-See [Pre-Commit Hooks Documentation](./PRE-COMMIT-HOOKS.md) for automated quality checks.
+See [Pre-Commit Hooks Documentation](./guides/pre-commit-hooks.md) for automated quality checks.
 
 ---
 
@@ -213,7 +218,7 @@ See [Pre-Commit Hooks Documentation](./PRE-COMMIT-HOOKS.md) for automated qualit
 
 Before making changes:
 
-1. Read [Code Modification Rules](./CODE_MODIFICATION_RULES.md)
+1. Read [Code Modification Rules](./guides/code-modification-rules.md)
 2. Review [Layout Guide](./guides/layout-mobile-optimization-guide.md)
 3. Check existing patterns
 4. Test on mobile devices

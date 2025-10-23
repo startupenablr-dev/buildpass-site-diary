@@ -1,25 +1,25 @@
-# CL## ⚠️ CRITICAL: Read First
+# CLAUDE.md - Project Reference
 
-**Before making ANY code changes:**
+## 🚀 For AI Assistants
 
-### 📚 Required Reading (IN ORDER)
+**Before starting any task:**
 
-1. 🚨 **[CODE_MODIFICATION_RULES.md](docs/CODE_MODIFICATION_RULES.md)** - Core rules & ESLint standards
-2. ⭐ **[Layout & Mobile Optimization Guide](docs/guides/layout-mobile-optimization-guide.md)** - PRIMARY REFERENCE
-3. 📦 **[Reusable Components Reference](docs/guides/reusable-components-reference.md)** - Before creating components
-4. 🔧 **[Pre-Commit Hooks](docs/PRE-COMMIT-HOOKS.md)** - Automated quality checks
-5. 📚 **[Documentation Index](docs/README.md)** - All available guideshis file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+1. **Browse the `docs/` folder** for relevant guides and patterns
+2. **Read [Documentation Index](docs/README.md)** - Complete guide listing with all available documentation
+
+---
 
 ## ⚠️ CRITICAL: Read First
 
 **Before making ANY code changes:**
 
-### � Required Reading (IN ORDER)
+### 📚 Required Reading (IN ORDER)
 
-1. �🚨 **[CODE_MODIFICATION_RULES.md](docs/CODE_MODIFICATION_RULES.md)** - Core rules
+1. 🚨 **[Code Modification Rules](docs/guides/code-modification-rules.md)** - Core rules & ESLint standards
 2. ⭐ **[Layout & Mobile Optimization Guide](docs/guides/layout-mobile-optimization-guide.md)** - PRIMARY REFERENCE
 3. 📦 **[Reusable Components Reference](docs/guides/reusable-components-reference.md)** - Before creating components
-4. 📚 **[Documentation Index](docs/README.md)** - All available guides
+4. 🔧 **[Pre-Commit Hooks](docs/guides/pre-commit-hooks.md)** - Automated quality checks
+5. 📚 **[Documentation Index](docs/README.md)** - All available guides
 
 ### 🎯 Golden Rules
 
@@ -223,7 +223,7 @@ git add .       # Stage fixes
 git commit -m "your message"
 ```
 
-See [Pre-Commit Hooks Documentation](docs/PRE-COMMIT-HOOKS.md) for details.
+See [Pre-Commit Hooks Documentation](docs/guides/pre-commit-hooks.md) for details.
 
 ## Architecture
 
