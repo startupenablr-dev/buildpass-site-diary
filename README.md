@@ -1,5 +1,7 @@
 # Site Diary Application - Coding Challenge Submission
 
+**Submitted by**: Michael Paul Quimson
+
 This is a Next.js web application with a GraphQL API for site diary management. The project is set up as a monorepo that also includes a React Native/Expo mobile app (not part of the coding challenge, but maintained for future use). I'm excited to learn React Native once I'm comfortable and efficient in contributing to both frontend and backend development, and have mastered their respective best practices!
 
 ## Getting Started
