@@ -67,7 +67,10 @@ export const WeatherSelector: React.FC<WeatherSelectorProps> = ({
           onValueChange={onDescriptionChange}
           name="weather-description"
         >
-          <SelectTrigger id="weather-description">
+          <SelectTrigger
+            id="weather-description"
+            aria-labelledby="weather-description-label"
+          >
             <SelectValue placeholder="Select weather condition">
               {selectedWeather && (
                 <div className="flex items-center gap-2">
