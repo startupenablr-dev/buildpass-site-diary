@@ -5,6 +5,9 @@ import { SITE_DIARIES } from '@/graphql/queries';
 import { PreloadQuery } from '@/lib/apollo-client';
 import { Suspense } from 'react';
 
+// Force dynamic rendering for pages that fetch from GraphQL API
+export const dynamic = 'force-dynamic';
+
 const Home: React.FC = () => {
   return (
     <PageContainer>

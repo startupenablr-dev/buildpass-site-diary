@@ -7,6 +7,9 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+// Force dynamic rendering for pages that fetch from GraphQL API
+export const dynamic = 'force-dynamic';
+
 interface DiaryDetailPageProps {
   params: Promise<{ id: string }>;
 }
