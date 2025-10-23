@@ -13,12 +13,21 @@ This is a [Next.js](https://nextjs.org) 15 project that also serves as the Graph
 
 ## Environment Variables
 
-Create a `.env.local` file in this directory:
+Copy the example environment file and configure your local environment:
 
-```sh
-API_KEY=something-cool
-NEXT_PUBLIC_API_GRAPHQL_URL=http://localhost:3000/api/graphql
+```bash
+cp .env.example .env.local
 ```
+
+Then edit `.env.local` with your actual values:
+
+### Required Variables
+
+- **`API_KEY`** - Your API authentication key
+- **`NEXT_PUBLIC_API_GRAPHQL_URL`** - GraphQL API endpoint URL (default: `http://localhost:3000/api/graphql`)
+- **`OPENAI_API_KEY`** - OpenAI API key for AI summarization feature (get from [OpenAI Platform](https://platform.openai.com/api-keys))
+
+**Note**: Never commit `.env.local` to version control. It contains sensitive keys and is already in `.gitignore`.
 
 ## Getting Started
 
