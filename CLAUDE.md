@@ -1,6 +1,14 @@
-# CLAUDE.md
+# CL## ⚠️ CRITICAL: Read First
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+**Before making ANY code changes:**
+
+### 📚 Required Reading (IN ORDER)
+
+1. 🚨 **[CODE_MODIFICATION_RULES.md](docs/CODE_MODIFICATION_RULES.md)** - Core rules & ESLint standards
+2. ⭐ **[Layout & Mobile Optimization Guide](docs/guides/layout-mobile-optimization-guide.md)** - PRIMARY REFERENCE
+3. 📦 **[Reusable Components Reference](docs/guides/reusable-components-reference.md)** - Before creating components
+4. 🔧 **[Pre-Commit Hooks](docs/PRE-COMMIT-HOOKS.md)** - Automated quality checks
+5. 📚 **[Documentation Index](docs/README.md)** - All available guideshis file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## ⚠️ CRITICAL: Read First
 
@@ -28,6 +36,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [ ] Verify naming conventions (descriptive, not generic)
 - [ ] Ensure mobile-first approach (touch targets, text sizing)
 - [ ] Preserve existing UI/UX unless explicitly requested to change
+- [ ] Run `yarn fix` before committing (format + lint + typecheck)
+- [ ] Pre-commit hooks will auto-run ESLint + Prettier on commit
 
 ### 🏗️ Best Practices
 
@@ -167,7 +177,10 @@ yarn workspace @untitled/web lint
 ### Monorepo-wide Commands
 
 ```bash
-# Run all CI checks (format, lint, typecheck)
+# Fix everything (format + lint + typecheck) - Run this first!
+yarn fix
+
+# Run all CI checks (format, lint, typecheck - no auto-fix)
 yarn ci
 
 # Format all code
@@ -191,6 +204,26 @@ yarn sherif-check
 # Fix dependency inconsistencies
 yarn sherif
 ```
+
+### Pre-Commit Hooks
+
+This project uses **Husky** and **lint-staged** for automated quality checks.
+
+**On every `git commit`:**
+
+- ✅ ESLint auto-fixes staged `.js/.ts/.tsx` files
+- ✅ Prettier formats staged files
+- ❌ Commit blocked if there are unfixable errors
+
+**If your commit fails:**
+
+```bash
+yarn fix        # Fix all issues
+git add .       # Stage fixes
+git commit -m "your message"
+```
+
+See [Pre-Commit Hooks Documentation](docs/PRE-COMMIT-HOOKS.md) for details.
 
 ## Architecture
 

@@ -27,6 +27,7 @@
 
 - [Quick Start Prompt](./QUICK-START-PROMPT.md) - Daily startup
 - [Code Modification Rules](./CODE_MODIFICATION_RULES.md) - Contribution guidelines
+- [Pre-Commit Hooks](./PRE-COMMIT-HOOKS.md) - Automated code quality checks
 
 ---
 
@@ -142,6 +143,10 @@ When working on this codebase:
 - [ ] Buttons are responsive
 - [ ] No horizontal scroll on mobile
 - [ ] Follows patterns in guide
+- [ ] Run `yarn fix` to format and check code
+- [ ] Pre-commit hooks will auto-check on commit
+
+See [Pre-Commit Hooks Documentation](./PRE-COMMIT-HOOKS.md) for automated quality checks.
 
 ---
 
