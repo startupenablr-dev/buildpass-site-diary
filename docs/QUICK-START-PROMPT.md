@@ -41,8 +41,6 @@ Please review these documents:
 - `docs/guides/frontend-coding-patterns.md` - Frontend patterns
 - `docs/guides/reusable-components-reference.md` - UI components
 - `docs/guides/ai-openai-integration.md` - AI features (if working with AI)
-- `docs/analysis/site-diary-implementation-analysis.md` - Current issues
-- `docs/analysis/site-diary-implementation-fixes.md` - Example solutions
 
 **Project Management:**
 
@@ -251,7 +249,7 @@ When implementing changes, Claude will also:
 - Update existing analysis documents with new findings
 - Document root causes, trade-offs, architectural decisions, and **proposed solutions**
 - Include implementation recommendations with pros/cons
-- Examples: `site-diary-implementation-analysis.md`, `site-diary-implementation-fixes.md`
+- **Example outputs from this prompt**: `site-diary-implementation-analysis.md`, `site-diary-implementation-fixes.md`
 
 ---
 
@@ -422,10 +420,10 @@ I need you to do a deep dive analysis on [specific issue/feature/problem].
 - Provide actionable implementation steps for each solution
 - Show code examples and references
 
-**Example Analysis Documents:**
+**Example Analysis Documents Created by This Prompt:**
 
-- `docs/analysis/site-diary-implementation-analysis.md` - Known issues and patterns
-- `docs/analysis/site-diary-implementation-fixes.md` - Solution approaches
+- `docs/analysis/site-diary-implementation-analysis.md` - Example: Known issues and patterns
+- `docs/analysis/site-diary-implementation-fixes.md` - Example: Solution approaches
 
 ---
 
