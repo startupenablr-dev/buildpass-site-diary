@@ -48,7 +48,12 @@ For app-specific documentation and how to setup your `.env` file, see the [Mobil
 
 ## Common Commands
 
+### Quick Fix & Quality Checks
+
 ```bash
+# Fix everything (format + lint + typecheck) - Run this first!
+yarn fix
+
 # Run all CI checks (format, lint, typecheck)
 yarn ci
 
@@ -64,6 +69,26 @@ yarn typecheck
 # Generate GraphQL types for both web and mobile apps
 yarn codegen
 ```
+
+### Pre-Commit Hooks
+
+This project uses **Husky** and **lint-staged** to automatically check code quality before each commit.
+
+When you run `git commit`:
+
+- ✅ ESLint checks and auto-fixes staged `.js/.ts/.tsx` files
+- ✅ Prettier formats staged files
+- ❌ Commit blocked if there are unfixable errors
+
+**If your commit fails:**
+
+```bash
+yarn fix        # Fix all issues
+git add .       # Stage fixes
+git commit -m "your message"
+```
+
+📖 See [Pre-Commit Hooks Documentation](./docs/PRE-COMMIT-HOOKS.md) for details.
 
 ## Documentation
 

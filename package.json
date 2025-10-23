@@ -13,13 +13,24 @@
     "codegen": "turbo run codegen --log-order=grouped",
     "dev:mobile": "yarn workspace @untitled/mobile dev",
     "dev:web": "yarn workspace @untitled/web dev",
+    "fix": "yarn format && yarn lint && yarn typecheck",
     "format": "prettier --experimental-cli --write '**/*.{md,json,js,ts,tsx}'",
     "format-check": "prettier --experimental-cli --check '**/*.{md,json,js,ts,tsx}'",
     "postinstall": "yarn-deduplicate && patch-package",
     "lint": "turbo run lint --log-order=grouped",
+    "prepare": "husky",
     "sherif": "sherif --fix",
     "sherif-check": "sherif",
     "typecheck": "turbo run typecheck --log-order=grouped"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
   },
   "resolutions": {
     "babel-plugin-react-compiler": "1.0",
@@ -29,6 +40,8 @@
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.7.0",
     "@prettier/plugin-oxc": "0.0.4",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.6",
     "patch-package": "8.0.1",
     "prettier": "3.6.2",
     "prettier-plugin-packagejson": "2.5.19",
