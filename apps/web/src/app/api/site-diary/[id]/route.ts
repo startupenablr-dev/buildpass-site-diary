@@ -1,21 +1,26 @@
 import { siteDiaries } from '@/data/site-diary';
-import { NextRequest, NextResponse } from 'next/server';
+import { createErrorResponse, createSuccessResponse } from '@/lib/api-response';
+import type { NextRequest } from 'next/server';
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const id = (await params).id;
+  const { id } = await params;
 
   const entry = siteDiaries.find((entry) => entry.id === id);
 
   if (!entry) {
-    return NextResponse.json({ error: 'Entry not found' }, { status: 404 });
+    return createErrorResponse({
+      code: 'SITE_DIARY_NOT_FOUND',
+      message: 'Entry not found',
+      status: 404,
+      details: { id },
+    });
   }
 
-  // Respond with the JSON data
-  return NextResponse.json(entry, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return createSuccessResponse(
+    entry,
+    'Site diary entry retrieved successfully',
+  );
 }

@@ -1517,7 +1517,73 @@ const handleSubmit = async () => {
 
 **Pattern:** Try/catch for mutation errors + refetch queries
 
-### 9.3 Error Boundaries (React)
+### 9.3 Advanced Error Extraction (GraphQL Extensions)
+
+For mutations that return rich error details (like rate limits), extract error codes and metadata from GraphQL extensions:
+
+```typescript
+type GraphQLErrorExtensions = {
+  code?: string;
+  details?: unknown;
+};
+
+type GraphQLLikeError = {
+  message?: string;
+  extensions?: GraphQLErrorExtensions;
+};
+
+type ExtractedErrorInfo = {
+  message: string;
+  code?: string;
+  details?: unknown;
+};
+
+function extractErrorInfo(error?: ApolloError | null): ExtractedErrorInfo {
+  if (!error) {
+    return { message: 'An unexpected error occurred.' };
+  }
+
+  const firstGraphQLError = error.graphQLErrors?.[0];
+
+  if (firstGraphQLError) {
+    return {
+      message: firstGraphQLError.message ?? 'An unexpected error occurred.',
+      code: firstGraphQLError.extensions?.code as string | undefined,
+      details: firstGraphQLError.extensions?.details,
+    };
+  }
+
+  return {
+    message:
+      error.message ||
+      error.networkError?.message ||
+      'An unexpected error occurred.',
+  };
+}
+
+// Usage in component
+const { message, code, details } = extractErrorInfo(error);
+const errorType = getErrorType(message, code);
+const waitSeconds =
+  code === 'RATE_LIMIT_EXCEEDED'
+    ? (details as { waitTimeSeconds?: number })?.waitTimeSeconds
+    : null;
+```
+
+**Pattern:** Extract structured error info from Apollo Client errors
+
+**Example:** See `apps/web/src/components/ai-summary-widget.tsx` for full implementation
+
+**Why extract extensions?**
+
+Our backend sets `extensions.code`, `extensions.http.status`, and `extensions.details` for client-safe errors. The frontend can use these to:
+
+- Show specific error messages (rate limit vs API key missing)
+- Display countdown timers using `details.waitTimeSeconds`
+- Provide contextual help text from `details.helpText`
+- Differentiate between client errors (4xx) and server errors (5xx)
+
+### 9.4 Error Boundaries (React)
 
 **Web Pattern:**
 

@@ -1592,6 +1592,126 @@ export function siteDiary(id: string): SiteDiary {
 }
 ```
 
+#### 8.3.1 GraphQL Yoga Error Masking Configuration ⭐
+
+**CRITICAL**: GraphQL Yoga masks errors by default for security. This hides your custom error messages from clients.
+
+**File:** `apps/web/src/app/api/graphql/route.ts`
+
+```typescript
+import { maskGraphQLError } from '@/lib/errors';
+import { createYoga } from 'graphql-yoga';
+import { NextRequest } from 'next/server';
+import { getSchema } from './schema';
+
+const { handleRequest } = createYoga({
+  schema: getSchema(),
+  graphqlEndpoint: '/api/graphql',
+  fetchAPI: { Response },
+
+  // ⭐ Custom masking: keep our messages, hide internals
+  maskedErrors: {
+    maskError(error, _message, isDev) {
+      return maskGraphQLError(error, Boolean(isDev));
+    },
+  },
+});
+```
+
+**Why custom masking?**
+
+- ✅ Preserves resolver-provided messages and error codes
+- ✅ Still hides stack traces and sensitive internals in production
+- ✅ Reuses shared helper in `@/lib/errors` for consistent formatting
+- ✅ Automatically downgrades unknown errors to a safe generic response
+
+**Important Note on Terminal Logs:**
+
+GraphQL Yoga logs errors **before** the masking function runs. This means:
+
+- **Terminal logs** may show `code: 'INTERNAL_SERVER_ERROR', status = 500`
+- **Client receives** the correctly masked error with proper code/status (e.g., `429 RATE_LIMIT_EXCEEDED`)
+
+This is **normal behavior**. The terminal shows the intermediate error representation, but the client sees the final masked error with correct extensions. You can verify the client response in the Network tab or GraphiQL to confirm proper error codes are returned.
+
+**When to use custom error masking:**
+
+- ❌ Using database that might leak sensitive info
+- ❌ File system errors that expose paths
+- ❌ Third-party API errors with sensitive data
+
+**Custom Error Masking (for production with databases):**
+
+```typescript
+const { handleRequest } = createYoga({
+  schema: getSchema(),
+  maskedErrors: {
+    maskError(error, message, isDev) {
+      // In development, show everything
+      if (isDev) {
+        return error;
+      }
+
+      // In production, mask database/system errors
+      if (
+        error.message.includes('database') ||
+        error.message.includes('ECONNREFUSED') ||
+        error.message.includes('prisma') ||
+        error.message.includes('ENOENT')
+      ) {
+        return new Error('An internal error occurred. Please try again.');
+      }
+
+      // Show your custom error messages
+      return error;
+    },
+  },
+});
+```
+
+**Error Propagation Pattern:**
+
+```typescript
+// In your mutation resolver
+export async function summarizeSiteDiaries(...): Promise<AISummaryResult> {
+  try {
+    // Call service that might throw errors
+    const summary = await summarizeDiariesWithAI(filteredDiaries);
+    return { summary, ... };
+  } catch (error) {
+    // ✅ Re-throw to preserve error message
+    if (error instanceof Error) {
+      throw error; // GraphQL Yoga will handle this
+    }
+    // ❌ Don't wrap in generic error
+    throw new Error('Failed to generate summary. Please try again.');
+  }
+}
+```
+
+**What NOT to do:**
+
+```typescript
+// ❌ BAD: Wrapping errors loses the original message
+try {
+  const result = await someOperation();
+} catch (error) {
+  throw new Error('An error occurred'); // Generic, not helpful
+}
+
+// ✅ GOOD: Re-throw to preserve the message
+try {
+  const result = await someOperation();
+} catch (error) {
+  if (error instanceof Error) {
+    throw error; // Preserves "Rate limit exceeded. Please wait..."
+  }
+  throw error; // Or just throw without wrapping
+}
+```
+
+**See also:** `docs/analysis/error-handling-deep-dive.md` for complete error flow analysis
+
 ---
 
 ## 9. Middleware & Authentication

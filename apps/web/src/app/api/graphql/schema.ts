@@ -3,193 +3,326 @@
  * Do not manually edit. Regenerate by running `npx grats`.
  */
 
-import { GraphQLSchema, GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLInputObjectType, GraphQLBoolean } from "graphql";
-import { siteDiaries as querySiteDiariesResolver, siteDiary as querySiteDiaryResolver } from "./query";
-import { createSiteDiary as mutationCreateSiteDiaryResolver, deleteSiteDiary as mutationDeleteSiteDiaryResolver, updateSiteDiary as mutationUpdateSiteDiaryResolver } from "./mutation";
+import {
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from 'graphql';
+import {
+  beautifyTextMutation as mutationBeautifyTextMutationResolver,
+  createSiteDiary as mutationCreateSiteDiaryResolver,
+  deleteSiteDiary as mutationDeleteSiteDiaryResolver,
+  summarizeSiteDiaries as mutationSummarizeSiteDiariesResolver,
+  updateSiteDiary as mutationUpdateSiteDiaryResolver,
+} from './mutation';
+import {
+  siteDiariesByDateRange as querySiteDiariesByDateRangeResolver,
+  siteDiaries as querySiteDiariesResolver,
+  siteDiary as querySiteDiaryResolver,
+} from './query';
+
 export function getSchema(): GraphQLSchema {
-    const WeatherType: GraphQLObjectType = new GraphQLObjectType({
-        name: "Weather",
-        fields() {
-            return {
-                description: {
-                    name: "description",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                temperature: {
-                    name: "temperature",
-                    type: new GraphQLNonNull(GraphQLInt)
-                }
-            };
-        }
-    });
-    const SiteDiaryType: GraphQLObjectType = new GraphQLObjectType({
-        name: "SiteDiary",
-        fields() {
-            return {
-                attachments: {
-                    name: "attachments",
-                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
-                },
-                attendees: {
-                    name: "attendees",
-                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
-                },
-                content: {
-                    name: "content",
-                    type: GraphQLString
-                },
-                createdBy: {
-                    name: "createdBy",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                date: {
-                    name: "date",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                id: {
-                    name: "id",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                title: {
-                    name: "title",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                weather: {
-                    name: "weather",
-                    type: WeatherType
-                }
-            };
-        }
-    });
-    const QueryType: GraphQLObjectType = new GraphQLObjectType({
-        name: "Query",
-        fields() {
-            return {
-                siteDiaries: {
-                    name: "siteDiaries",
-                    type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SiteDiaryType))),
-                    resolve() {
-                        return querySiteDiariesResolver();
-                    }
-                },
-                siteDiary: {
-                    name: "siteDiary",
-                    type: SiteDiaryType,
-                    args: {
-                        id: {
-                            type: new GraphQLNonNull(GraphQLString)
-                        }
-                    },
-                    resolve(_source, args) {
-                        return querySiteDiaryResolver(args.id);
-                    }
-                }
-            };
-        }
-    });
-    const WeatherInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
-        name: "WeatherInput",
-        fields() {
-            return {
-                description: {
-                    name: "description",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                temperature: {
-                    name: "temperature",
-                    type: new GraphQLNonNull(GraphQLInt)
-                }
-            };
-        }
-    });
-    const SiteDiaryInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
-        name: "SiteDiaryInput",
-        fields() {
-            return {
-                attachments: {
-                    name: "attachments",
-                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
-                },
-                attendees: {
-                    name: "attendees",
-                    type: new GraphQLList(new GraphQLNonNull(GraphQLString))
-                },
-                content: {
-                    name: "content",
-                    type: GraphQLString
-                },
-                createdBy: {
-                    name: "createdBy",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                date: {
-                    name: "date",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                id: {
-                    name: "id",
-                    type: GraphQLString
-                },
-                title: {
-                    name: "title",
-                    type: new GraphQLNonNull(GraphQLString)
-                },
-                weather: {
-                    name: "weather",
-                    type: WeatherInputType
-                }
-            };
-        }
-    });
-    const MutationType: GraphQLObjectType = new GraphQLObjectType({
-        name: "Mutation",
-        fields() {
-            return {
-                createSiteDiary: {
-                    name: "createSiteDiary",
-                    type: new GraphQLNonNull(SiteDiaryType),
-                    args: {
-                        input: {
-                            type: new GraphQLNonNull(SiteDiaryInputType)
-                        }
-                    },
-                    resolve(_source, args) {
-                        return mutationCreateSiteDiaryResolver(args.input);
-                    }
-                },
-                deleteSiteDiary: {
-                    name: "deleteSiteDiary",
-                    type: new GraphQLNonNull(GraphQLBoolean),
-                    args: {
-                        id: {
-                            type: new GraphQLNonNull(GraphQLString)
-                        }
-                    },
-                    resolve(_source, args) {
-                        return mutationDeleteSiteDiaryResolver(args.id);
-                    }
-                },
-                updateSiteDiary: {
-                    name: "updateSiteDiary",
-                    type: SiteDiaryType,
-                    args: {
-                        id: {
-                            type: new GraphQLNonNull(GraphQLString)
-                        },
-                        input: {
-                            type: new GraphQLNonNull(SiteDiaryInputType)
-                        }
-                    },
-                    resolve(_source, args) {
-                        return mutationUpdateSiteDiaryResolver(args.id, args.input);
-                    }
-                }
-            };
-        }
-    });
-    return new GraphQLSchema({
-        query: QueryType,
-        mutation: MutationType,
-        types: [SiteDiaryInputType, WeatherInputType, MutationType, QueryType, SiteDiaryType, WeatherType]
-    });
+  const WeatherType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'Weather',
+    fields() {
+      return {
+        description: {
+          name: 'description',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        temperature: {
+          name: 'temperature',
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+      };
+    },
+  });
+  const SiteDiaryType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'SiteDiary',
+    fields() {
+      return {
+        attachments: {
+          name: 'attachments',
+          type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+        },
+        attendees: {
+          name: 'attendees',
+          type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+        },
+        content: {
+          name: 'content',
+          type: GraphQLString,
+        },
+        createdBy: {
+          name: 'createdBy',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        date: {
+          name: 'date',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        id: {
+          name: 'id',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        title: {
+          name: 'title',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        weather: {
+          name: 'weather',
+          type: WeatherType,
+        },
+      };
+    },
+  });
+  const QueryType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'Query',
+    fields() {
+      return {
+        siteDiaries: {
+          name: 'siteDiaries',
+          type: new GraphQLNonNull(
+            new GraphQLList(new GraphQLNonNull(SiteDiaryType)),
+          ),
+          resolve() {
+            return querySiteDiariesResolver();
+          },
+        },
+        siteDiariesByDateRange: {
+          description: 'Get site diaries within a date range',
+          name: 'siteDiariesByDateRange',
+          type: new GraphQLNonNull(
+            new GraphQLList(new GraphQLNonNull(SiteDiaryType)),
+          ),
+          args: {
+            endDate: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+            startDate: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+          },
+          resolve(_source, args) {
+            return querySiteDiariesByDateRangeResolver(
+              args.startDate,
+              args.endDate,
+            );
+          },
+        },
+        siteDiary: {
+          name: 'siteDiary',
+          type: SiteDiaryType,
+          args: {
+            id: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+          },
+          resolve(_source, args) {
+            return querySiteDiaryResolver(args.id);
+          },
+        },
+      };
+    },
+  });
+  const AIBeautifyResultType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'AIBeautifyResult',
+    fields() {
+      return {
+        beautifiedText: {
+          name: 'beautifiedText',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        enhanced: {
+          name: 'enhanced',
+          type: new GraphQLNonNull(GraphQLBoolean),
+        },
+        originalText: {
+          name: 'originalText',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      };
+    },
+  });
+  const WeatherInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
+    name: 'WeatherInput',
+    fields() {
+      return {
+        description: {
+          name: 'description',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        temperature: {
+          name: 'temperature',
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+      };
+    },
+  });
+  const SiteDiaryInputType: GraphQLInputObjectType = new GraphQLInputObjectType(
+    {
+      name: 'SiteDiaryInput',
+      fields() {
+        return {
+          attachments: {
+            name: 'attachments',
+            type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+          },
+          attendees: {
+            name: 'attendees',
+            type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
+          },
+          content: {
+            name: 'content',
+            type: GraphQLString,
+          },
+          createdBy: {
+            name: 'createdBy',
+            type: new GraphQLNonNull(GraphQLString),
+          },
+          date: {
+            name: 'date',
+            type: new GraphQLNonNull(GraphQLString),
+          },
+          id: {
+            name: 'id',
+            type: GraphQLString,
+          },
+          title: {
+            name: 'title',
+            type: new GraphQLNonNull(GraphQLString),
+          },
+          weather: {
+            name: 'weather',
+            type: WeatherInputType,
+          },
+        };
+      },
+    },
+  );
+  const AISummaryResultType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'AISummaryResult',
+    fields() {
+      return {
+        diariesCount: {
+          name: 'diariesCount',
+          type: new GraphQLNonNull(GraphQLInt),
+        },
+        endDate: {
+          name: 'endDate',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        startDate: {
+          name: 'startDate',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        summary: {
+          name: 'summary',
+          type: new GraphQLNonNull(GraphQLString),
+        },
+      };
+    },
+  });
+  const MutationType: GraphQLObjectType = new GraphQLObjectType({
+    name: 'Mutation',
+    fields() {
+      return {
+        beautifyTextMutation: {
+          description:
+            'Enhance user-entered text using AI to make it more professional',
+          name: 'beautifyTextMutation',
+          type: new GraphQLNonNull(AIBeautifyResultType),
+          args: {
+            text: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+          },
+          resolve(_source, args) {
+            return mutationBeautifyTextMutationResolver(args.text);
+          },
+        },
+        createSiteDiary: {
+          name: 'createSiteDiary',
+          type: new GraphQLNonNull(SiteDiaryType),
+          args: {
+            input: {
+              type: new GraphQLNonNull(SiteDiaryInputType),
+            },
+          },
+          resolve(_source, args) {
+            return mutationCreateSiteDiaryResolver(args.input);
+          },
+        },
+        deleteSiteDiary: {
+          name: 'deleteSiteDiary',
+          type: new GraphQLNonNull(GraphQLBoolean),
+          args: {
+            id: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+          },
+          resolve(_source, args) {
+            return mutationDeleteSiteDiaryResolver(args.id);
+          },
+        },
+        summarizeSiteDiaries: {
+          description: 'Summarize site diaries within a date range using AI',
+          name: 'summarizeSiteDiaries',
+          type: new GraphQLNonNull(AISummaryResultType),
+          args: {
+            endDate: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+            limit: {
+              type: GraphQLInt,
+            },
+            startDate: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+          },
+          resolve(_source, args) {
+            return mutationSummarizeSiteDiariesResolver(
+              args.startDate,
+              args.endDate,
+              args.limit,
+            );
+          },
+        },
+        updateSiteDiary: {
+          name: 'updateSiteDiary',
+          type: SiteDiaryType,
+          args: {
+            id: {
+              type: new GraphQLNonNull(GraphQLString),
+            },
+            input: {
+              type: new GraphQLNonNull(SiteDiaryInputType),
+            },
+          },
+          resolve(_source, args) {
+            return mutationUpdateSiteDiaryResolver(args.id, args.input);
+          },
+        },
+      };
+    },
+  });
+  return new GraphQLSchema({
+    query: QueryType,
+    mutation: MutationType,
+    types: [
+      SiteDiaryInputType,
+      WeatherInputType,
+      AIBeautifyResultType,
+      AISummaryResultType,
+      MutationType,
+      QueryType,
+      SiteDiaryType,
+      WeatherType,
+    ],
+  });
 }

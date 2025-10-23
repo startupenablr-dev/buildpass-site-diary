@@ -1,6 +1,10 @@
-import { siteDiaries } from '@/data/site-diary';
-import { NextRequest, NextResponse } from 'next/server';
-import { SiteDiary } from '../../../data/site-diary';
+import { siteDiaries, type SiteDiary } from '@/data/site-diary';
+import {
+  createErrorResponseFrom,
+  createSuccessResponse,
+} from '@/lib/api-response';
+import { AppError } from '@/lib/errors';
+import type { NextRequest } from 'next/server';
 
 export async function GET() {
   const diaries = siteDiaries.map((entry) => {
@@ -12,10 +16,10 @@ export async function GET() {
     };
   });
 
-  return NextResponse.json(diaries, {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
+  return createSuccessResponse(
+    diaries,
+    'Site diary entries retrieved successfully',
+  );
 }
 
 // POST handler: Create a new site diary
@@ -30,26 +34,31 @@ export async function POST(request: NextRequest) {
       !siteDiary.createdBy ||
       !siteDiary.title
     ) {
-      throw new Error('id, date, createdBy and title are required');
+      throw new AppError({
+        code: 'VALIDATION_ERROR',
+        message: 'id, date, createdBy and title are required',
+        status: 400,
+        details: {
+          missingFields: ['id', 'date', 'createdBy', 'title'].filter(
+            (field) => !(siteDiary as Record<string, unknown>)[field],
+          ),
+        },
+      });
     }
 
     // Actually save the diary to the in-memory store
     siteDiaries.push(siteDiary);
 
-    return NextResponse.json(
-      { message: 'Site diary created successfully', siteDiary },
+    return createSuccessResponse(
+      { siteDiary },
+      'Site diary created successfully',
       { status: 201 },
     );
   } catch (e: unknown) {
-    let errorMessage = 'Unknown error';
-
-    if (e instanceof Error) {
-      errorMessage = e.message;
-    }
-
-    return NextResponse.json(
-      { error: 'Invalid request format', errorMessage },
-      { status: 400 },
-    );
+    return createErrorResponseFrom(e, {
+      code: 'SITE_DIARY_CREATE_FAILED',
+      message: 'Invalid request format',
+      status: 400,
+    });
   }
 }

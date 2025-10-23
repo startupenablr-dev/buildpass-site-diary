@@ -15,6 +15,7 @@
 - [Developer Onboarding](./guides/developer-onboarding.md) - Getting started
 - [Frontend Coding Patterns](./guides/frontend-coding-patterns.md) - Code standards
 - [Backend Coding Patterns](./guides/backend-coding-patterns.md) - Server-side patterns
+- [Error Handling Reference](./guides/error-handling-reference.md) - Error flow & debugging
 - [Reusable Components Reference](./guides/reusable-components-reference.md) - Component library
 
 ### 📖 Implementation Guides

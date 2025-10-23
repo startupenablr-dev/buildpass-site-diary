@@ -1,3 +1,4 @@
+import { maskGraphQLError } from '@/lib/errors';
 import { createYoga } from 'graphql-yoga';
 import { NextRequest } from 'next/server';
 import { getSchema } from './schema';
@@ -10,6 +11,13 @@ const { handleRequest } = createYoga({
 
   // Yoga needs to know how to create a valid Next response
   fetchAPI: { Response },
+
+  // Configure error masking to keep custom messages while hiding internal details
+  maskedErrors: {
+    maskError(error, _message, isDev) {
+      return maskGraphQLError(error, Boolean(isDev));
+    },
+  },
 });
 
 export async function GET(request: NextRequest) {

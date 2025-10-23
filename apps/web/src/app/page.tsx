@@ -1,3 +1,4 @@
+import { AISummaryWidget } from '@/components/ai-summary-widget';
 import { DiaryStats } from '@/components/diary-stats';
 import { PageContainer, PageHeader } from '@/components/layout';
 import { SITE_DIARIES } from '@/graphql/queries';
@@ -26,9 +27,12 @@ const Home: React.FC = () => {
           </Suspense>
         </PreloadQuery>
 
-        {/* Info Card */}
+        {/* AI Summary Widget */}
+        <AISummaryWidget />
+
+        {/* Features Card */}
         <div className="bg-muted/50 rounded-lg border p-4 sm:p-6">
-          <h2 className="mb-2 text-lg font-semibold">Getting Started</h2>
+          <h2 className="mb-2 text-lg font-semibold">Features</h2>
           <p className="text-muted-foreground mb-4 text-sm">
             Record daily site activities, weather conditions, attendees, and
             progress updates. All entries are accessible from any device for

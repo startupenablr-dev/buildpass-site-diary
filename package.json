@@ -24,8 +24,15 @@
     "typecheck": "turbo run typecheck --log-order=grouped"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --cache --fix",
+    "apps/web/**/*.{js,ts,tsx}": [
+      "yarn workspace @untitled/web eslint --cache --fix",
+      "prettier --write"
+    ],
+    "apps/mobile/**/*.{js,ts,tsx}": [
+      "yarn workspace @untitled/mobile eslint --cache --fix",
+      "prettier --write"
+    ],
+    "packages/**/*.{js,ts,tsx}": [
       "prettier --write"
     ],
     "*.{md,json}": [

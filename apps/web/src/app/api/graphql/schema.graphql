@@ -17,14 +17,33 @@ input WeatherInput {
   temperature: Int!
 }
 
+type AIBeautifyResult {
+  beautifiedText: String!
+  enhanced: Boolean!
+  originalText: String!
+}
+
+type AISummaryResult {
+  diariesCount: Int!
+  endDate: String!
+  startDate: String!
+  summary: String!
+}
+
 type Mutation {
+  """Enhance user-entered text using AI to make it more professional"""
+  beautifyTextMutation(text: String!): AIBeautifyResult!
   createSiteDiary(input: SiteDiaryInput!): SiteDiary!
   deleteSiteDiary(id: String!): Boolean!
+  """Summarize site diaries within a date range using AI"""
+  summarizeSiteDiaries(endDate: String!, limit: Int, startDate: String!): AISummaryResult!
   updateSiteDiary(id: String!, input: SiteDiaryInput!): SiteDiary
 }
 
 type Query {
   siteDiaries: [SiteDiary!]!
+  """Get site diaries within a date range"""
+  siteDiariesByDateRange(endDate: String!, startDate: String!): [SiteDiary!]!
   siteDiary(id: String!): SiteDiary
 }
 
