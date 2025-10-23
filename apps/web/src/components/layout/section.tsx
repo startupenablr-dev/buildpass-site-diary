@@ -29,11 +29,9 @@ export function Section({
     <section className={cn('space-y-4 sm:space-y-6', className)}>
       {(title || description) && (
         <div className="space-y-1">
-          {title && (
-            <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>
-          )}
+          {title && <h2 className="text-2xl font-bold sm:text-3xl">{title}</h2>}
           {description && (
-            <p className="text-sm text-muted-foreground sm:text-base">
+            <p className="text-muted-foreground text-sm sm:text-base">
               {description}
             </p>
           )}

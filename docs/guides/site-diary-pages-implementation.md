@@ -702,6 +702,7 @@ mutation CreateDiary {
   - Each card shows title, date, creator, weather
   - Hover over cards for shadow effect
   - Click any card to view details
+
   ```
 
   ```

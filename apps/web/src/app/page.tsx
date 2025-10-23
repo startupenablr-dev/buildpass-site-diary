@@ -15,23 +15,26 @@ const Home: React.FC = () => {
       <div className="space-y-8">
         {/* Stats Section */}
         <PreloadQuery query={SITE_DIARIES}>
-          <Suspense fallback={
-            <div className="rounded-lg border bg-card p-6">
-              <p className="text-muted-foreground">Loading statistics...</p>
-            </div>
-          }>
+          <Suspense
+            fallback={
+              <div className="bg-card rounded-lg border p-6">
+                <p className="text-muted-foreground">Loading statistics...</p>
+              </div>
+            }
+          >
             <DiaryStats />
           </Suspense>
         </PreloadQuery>
 
         {/* Info Card */}
-        <div className="rounded-lg border bg-muted/50 p-4 sm:p-6">
-          <h2 className="text-lg font-semibold mb-2">Getting Started</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            Record daily site activities, weather conditions, attendees, and progress updates. 
-            All entries are accessible from any device for your entire team.
+        <div className="bg-muted/50 rounded-lg border p-4 sm:p-6">
+          <h2 className="mb-2 text-lg font-semibold">Getting Started</h2>
+          <p className="text-muted-foreground mb-4 text-sm">
+            Record daily site activities, weather conditions, attendees, and
+            progress updates. All entries are accessible from any device for
+            your entire team.
           </p>
-          <ul className="space-y-2 text-sm text-muted-foreground">
+          <ul className="text-muted-foreground space-y-2 text-sm">
             <li className="flex items-start gap-2">
               <span className="text-primary mt-0.5">✓</span>
               <span>Create detailed diary entries with photos</span>

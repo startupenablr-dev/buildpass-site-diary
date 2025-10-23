@@ -35,7 +35,7 @@ export const DiaryList: React.FC = () => {
                   </Badge>
                 )}
               </div>
-              <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex flex-col gap-1 text-sm">
                 <p>{new Date(diary.date).toLocaleDateString()}</p>
                 <p className="text-xs">By {diary.createdBy}</p>
               </div>
@@ -44,7 +44,7 @@ export const DiaryList: React.FC = () => {
               {diary.content && (
                 <p className="line-clamp-3 text-sm">{diary.content}</p>
               )}
-              <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+              <div className="text-muted-foreground flex flex-wrap gap-2 text-xs">
                 {diary.attendees && diary.attendees.length > 0 && (
                   <span className="flex items-center gap-1">
                     <Users className="h-3 w-3" />

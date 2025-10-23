@@ -52,6 +52,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         <div className="flex gap-2">
           <Input
             id="image-url"
+            name="image-url"
             type="url"
             placeholder="https://example.com/image.jpg"
             value={currentUrl}
@@ -67,7 +68,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           </Button>
         </div>
         <p className="text-muted-foreground text-sm">
-          Enter image URLs one at a time. Press Enter or click "Add Image" to add.
+          Enter image URLs one at a time. Press Enter or click &quot;Add
+          Image&quot; to add.
         </p>
       </div>
 
@@ -84,13 +86,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                   src={url}
                   alt={`Upload ${index + 1}`}
                   fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
                   className="object-cover"
                 />
                 <Button
                   type="button"
                   variant="destructive"
                   size="icon"
-                  className="absolute right-2 top-2 h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
+                  className="absolute top-2 right-2 h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
                   onClick={() => handleRemoveImage(index)}
                 >
                   <X className="h-4 w-4" />

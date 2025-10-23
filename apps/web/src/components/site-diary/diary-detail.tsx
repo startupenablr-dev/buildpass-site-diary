@@ -1,8 +1,5 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DELETE_SITE_DIARY, SITE_DIARY } from '@/graphql/queries';
 import {
   SiteDiaryQuery,
@@ -51,7 +51,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
       await deleteDiary({
         variables: { id },
       });
-    } catch (error) {
+    } catch {
       // Error is handled in onError
     }
   };
@@ -73,18 +73,18 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
         <Button
           variant="outline"
           onClick={() => router.push(`/diary/${id}/edit`)}
-          className="w-full sm:w-auto h-11 px-6"
+          className="h-11 w-full px-6 sm:w-auto"
         >
           <Edit2 className="mr-2 size-4" />
           Edit
         </Button>
-        
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               disabled={deleting}
-              className="w-full sm:w-auto h-11 px-6"
+              className="h-11 w-full px-6 sm:w-auto"
             >
               <Trash2 className="mr-2 size-4" />
               {deleting ? 'Deleting...' : 'Delete'}
@@ -95,7 +95,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete the
-                diary entry "{diary.title}".
+                diary entry &quot;{diary.title}&quot;.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -114,8 +114,10 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
       <Card>
         <CardHeader>
           <div className="space-y-4">
-            <CardTitle className="text-2xl sm:text-3xl">{diary.title}</CardTitle>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+            <CardTitle className="text-2xl sm:text-3xl">
+              {diary.title}
+            </CardTitle>
+            <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>{new Date(diary.date).toLocaleDateString()}</span>
@@ -137,7 +139,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
           {diary.content && (
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Description</h3>
-              <p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {diary.content}
               </p>
             </div>
@@ -169,7 +171,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
                 {diary.attachments.map((attachment, index) => (
                   <div
                     key={index}
-                    className="group relative aspect-square overflow-hidden rounded-lg border bg-muted"
+                    className="group bg-muted relative aspect-square overflow-hidden rounded-lg border"
                   >
                     <Image
                       src={attachment}

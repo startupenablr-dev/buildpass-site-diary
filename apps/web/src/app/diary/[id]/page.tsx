@@ -1,6 +1,6 @@
+import { PageContainer, PageHeader } from '@/components/layout';
 import { DiaryDetail } from '@/components/site-diary/diary-detail';
 import { Button } from '@/components/ui/button';
-import { PageContainer, PageHeader } from '@/components/layout';
 import { SITE_DIARY } from '@/graphql/queries';
 import { PreloadQuery } from '@/lib/apollo-client';
 import { ArrowLeft } from 'lucide-react';
@@ -20,7 +20,7 @@ const DiaryDetailPage: React.FC<DiaryDetailPageProps> = async ({ params }) => {
         title="Diary Entry"
         description="View site activities, weather conditions, and progress updates."
         actions={
-          <Button asChild variant="outline" className="w-full sm:w-auto h-11">
+          <Button asChild variant="outline" className="h-11 w-full sm:w-auto">
             <Link href="/diary">
               <ArrowLeft className="mr-2 size-4" />
               Back to List
@@ -29,10 +29,7 @@ const DiaryDetailPage: React.FC<DiaryDetailPageProps> = async ({ params }) => {
         }
       />
 
-      <PreloadQuery
-        query={SITE_DIARY}
-        variables={{ id }}
-      >
+      <PreloadQuery query={SITE_DIARY} variables={{ id }}>
         <Suspense
           fallback={
             <div className="flex min-h-[400px] items-center justify-center">

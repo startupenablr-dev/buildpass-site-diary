@@ -40,11 +40,9 @@ export function PageHeader({
       )}
     >
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold sm:text-4xl lg:text-4xl">
-          {title}
-        </h1>
+        <h1 className="text-3xl font-bold sm:text-4xl lg:text-4xl">{title}</h1>
         {description && (
-          <p className="text-sm text-muted-foreground sm:text-base">
+          <p className="text-muted-foreground text-sm sm:text-base">
             {description}
           </p>
         )}

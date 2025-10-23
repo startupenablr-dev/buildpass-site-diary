@@ -1,6 +1,6 @@
+import { PageContainer, PageHeader } from '@/components/layout';
 import { DiaryForm } from '@/components/site-diary/diary-form';
 import { Button } from '@/components/ui/button';
-import { PageContainer, PageHeader } from '@/components/layout';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,7 +11,7 @@ const CreateDiaryPage: React.FC = () => {
         title="Create New Diary Entry"
         description="Record site activities, weather conditions, and progress updates."
         actions={
-          <Button variant="outline" asChild className="w-full sm:w-auto h-11">
+          <Button variant="outline" asChild className="h-11 w-full sm:w-auto">
             <Link href="/diary">
               <ArrowLeft className="mr-2 size-4" />
               Back to List
@@ -20,7 +20,7 @@ const CreateDiaryPage: React.FC = () => {
         }
       />
 
-      <div className="rounded-lg border bg-card p-4 shadow-sm sm:p-5 lg:p-6">
+      <div className="bg-card rounded-lg border p-4 shadow-sm sm:p-5 lg:p-6">
         <DiaryForm />
       </div>
     </PageContainer>

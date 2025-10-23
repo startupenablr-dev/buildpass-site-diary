@@ -39,11 +39,11 @@ export function DesktopNav() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 border-b bg-background">
+      <nav className="bg-background sticky top-0 z-50 border-b">
         <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
               <span className="text-sm font-bold">BP</span>
             </div>
             <span className="text-lg font-bold">BuildPass</span>
@@ -81,18 +81,14 @@ export function DesktopNav() {
             className="lg:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? (
-              <X className="size-5" />
-            ) : (
-              <Menu className="size-5" />
-            )}
+            {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             <span className="sr-only">Toggle menu</span>
           </Button>
         </div>
 
         {/* Mobile Menu Dropdown */}
         {isOpen && (
-          <div className="border-t bg-background lg:hidden">
+          <div className="bg-background border-t lg:hidden">
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col gap-2">
                 {navItems.map((item) => {

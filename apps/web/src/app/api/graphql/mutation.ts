@@ -46,7 +46,7 @@ export function updateSiteDiary(
   input: SiteDiaryInput,
 ): SiteDiary | null {
   const index = siteDiaries.findIndex((diary) => diary.id === id);
-  
+
   if (index === -1) {
     return null;
   }
@@ -70,7 +70,7 @@ export function updateSiteDiary(
 /** @gqlMutationField */
 export function deleteSiteDiary(id: string): boolean {
   const index = siteDiaries.findIndex((diary) => diary.id === id);
-  
+
   if (index === -1) {
     return false;
   }

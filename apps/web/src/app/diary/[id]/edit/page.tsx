@@ -1,6 +1,6 @@
+import { PageContainer, PageHeader } from '@/components/layout';
 import { DiaryEditForm } from '@/components/site-diary/diary-edit-form';
 import { Button } from '@/components/ui/button';
-import { PageContainer, PageHeader } from '@/components/layout';
 import { SITE_DIARY } from '@/graphql/queries';
 import { PreloadQuery } from '@/lib/apollo-client';
 import { X } from 'lucide-react';
@@ -20,7 +20,7 @@ const DiaryEditPage: React.FC<DiaryEditPageProps> = async ({ params }) => {
         title="Edit Diary Entry"
         description="Update site activities, weather conditions, and progress."
         actions={
-          <Button asChild variant="outline" className="w-full sm:w-auto h-11">
+          <Button asChild variant="outline" className="h-11 w-full sm:w-auto">
             <Link href={`/diary/${id}`}>
               <X className="mr-2 size-4" />
               Cancel

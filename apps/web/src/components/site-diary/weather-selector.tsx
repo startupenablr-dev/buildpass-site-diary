@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CloudRain, CloudSun, CloudSnow, Sun, Cloud, Wind } from 'lucide-react';
+import { Cloud, CloudRain, CloudSnow, CloudSun, Sun, Wind } from 'lucide-react';
 import * as React from 'react';
 
 interface WeatherSelectorProps {
@@ -46,6 +46,7 @@ export const WeatherSelector: React.FC<WeatherSelectorProps> = ({
         <div className="flex items-center gap-2">
           <Input
             id="temperature"
+            name="temperature"
             type="number"
             placeholder="20"
             value={temperature ?? ''}
@@ -61,7 +62,11 @@ export const WeatherSelector: React.FC<WeatherSelectorProps> = ({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="weather-description">Weather Condition</Label>
-        <Select value={description} onValueChange={onDescriptionChange}>
+        <Select
+          value={description || ''}
+          onValueChange={onDescriptionChange}
+          name="weather-description"
+        >
           <SelectTrigger id="weather-description">
             <SelectValue placeholder="Select weather condition">
               {selectedWeather && (

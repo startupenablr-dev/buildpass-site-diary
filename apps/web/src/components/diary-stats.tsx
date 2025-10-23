@@ -23,17 +23,15 @@ export const DiaryStats: React.FC = () => {
   });
 
   return (
-    <div className="rounded-lg border bg-card p-4 sm:p-6">
+    <div className="bg-card rounded-lg border p-4 sm:p-6">
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-bold text-primary">{count}</span>
+          <span className="text-primary text-4xl font-bold">{count}</span>
           <span className="text-muted-foreground">
             {count === 1 ? 'diary entry' : 'diary entries'}
           </span>
         </div>
-        <p className="text-sm text-muted-foreground">
-          As of {formattedDate}
-        </p>
+        <p className="text-muted-foreground text-sm">As of {formattedDate}</p>
       </div>
     </div>
   );

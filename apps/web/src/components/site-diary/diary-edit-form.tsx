@@ -4,10 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { DatePicker } from './date-picker';
-import { ImageUploader } from './image-uploader';
-import { WeatherSelector } from './weather-selector';
-import { UPDATE_SITE_DIARY, SITE_DIARY } from '@/graphql/queries';
+import { SITE_DIARY, UPDATE_SITE_DIARY } from '@/graphql/queries';
 import {
   SiteDiaryQuery,
   SiteDiaryQueryVariables,
@@ -15,6 +12,9 @@ import {
 import { useMutation, useSuspenseQuery } from '@apollo/client/react';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { DatePicker } from './date-picker';
+import { ImageUploader } from './image-uploader';
+import { WeatherSelector } from './weather-selector';
 
 interface DiaryEditFormProps {
   id: string;
@@ -37,9 +37,9 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
     SITE_DIARY,
     { variables: { id } },
   );
-  
+
   const diary = data.siteDiary;
-  
+
   const [formData, setFormData] = React.useState<DiaryFormData>({
     title: diary?.title || '',
     date: diary?.date || '',
@@ -106,7 +106,8 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
             content: formData.content || undefined,
             weather,
             attendees: attendeesList.length > 0 ? attendeesList : undefined,
-            attachments: formData.images.length > 0 ? formData.images : undefined,
+            attachments:
+              formData.images.length > 0 ? formData.images : undefined,
           },
         },
         refetchQueries: [{ query: SITE_DIARY, variables: { id } }],
@@ -137,6 +138,7 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
         </Label>
         <Input
           id="title"
+          name="title"
           type="text"
           placeholder="e.g., Daily Progress Update"
           value={formData.title}
@@ -168,6 +170,7 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
         </Label>
         <Input
           id="createdBy"
+          name="createdBy"
           type="text"
           placeholder="Your name"
           value={formData.createdBy}
@@ -183,13 +186,18 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
 
       {/* Description */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="content" className="text-base">Description</Label>
+        <Label htmlFor="content" className="text-base">
+          Description
+        </Label>
         <Textarea
           id="content"
+          name="content"
           placeholder="Describe the activities and progress for the day..."
           rows={6}
           value={formData.content}
-          onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, content: e.target.value })
+          }
           className="min-h-[140px] text-base"
         />
         <p className="text-muted-foreground text-sm">
@@ -217,9 +225,12 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
 
       {/* Attendees */}
       <div className="flex flex-col gap-2">
-        <Label htmlFor="attendees" className="text-base">Attendees</Label>
+        <Label htmlFor="attendees" className="text-base">
+          Attendees
+        </Label>
         <Input
           id="attendees"
+          name="attendees"
           type="text"
           placeholder="John Doe, Jane Smith, Bob Builder"
           value={formData.attendees}
@@ -247,17 +258,17 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
 
       {/* Submit Error */}
       {errors.submit && (
-        <div className="rounded-md border border-destructive bg-destructive/10 p-4">
+        <div className="border-destructive bg-destructive/10 rounded-md border p-4">
           <p className="text-destructive text-sm">{errors.submit}</p>
         </div>
       )}
 
       {/* Form Actions - Stack on mobile, side-by-side on tablet+ */}
       <div className="flex flex-col gap-3 pt-4 sm:flex-row">
-        <Button 
-          type="submit" 
-          disabled={loading} 
-          className="w-full sm:w-auto h-11 px-6"
+        <Button
+          type="submit"
+          disabled={loading}
+          className="h-11 w-full px-6 sm:w-auto"
         >
           {loading ? 'Updating...' : 'Update Diary Entry'}
         </Button>
@@ -265,7 +276,7 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
           type="button"
           variant="outline"
           onClick={() => router.push(`/diary/${id}`)}
-          className="w-full sm:w-auto h-11 px-6"
+          className="h-11 w-full px-6 sm:w-auto"
         >
           Cancel
         </Button>

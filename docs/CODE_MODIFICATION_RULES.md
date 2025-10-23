@@ -35,15 +35,66 @@
    - Proper error handling
    - **Use Lucide React icons (NOT emojis)**
 
-5. **Create new files for new features**
+5. **Form fields must have proper attributes and labels**
+   - **Always add `id` and `name` attributes** to form inputs, selects, and textareas
+   - **Every form field MUST have an associated Label component** with matching `htmlFor` attribute
+   - **Controlled components must have default values** (use `''` instead of `undefined`)
+   - Example:
+     ```tsx
+     <Label htmlFor="field-id">Field Label</Label>
+     <Input id="field-id" name="field-name" />
+     ```
+   - Example for Select:
+     ```tsx
+     <Label htmlFor="weather">Weather</Label>
+     <Select value={value || ''} name="weather">
+       <SelectTrigger id="weather">
+         <SelectValue />
+       </SelectTrigger>
+     </Select>
+     ```
+   - This prevents accessibility warnings and controlled/uncontrolled component errors
+   - **Make Select component `name` prop required** to enforce proper form field naming
+
+6. **Escape special characters in JSX text**
+   - **Always escape quotes in JSX text** using HTML entities
+   - Use `&quot;` for double quotes in text content
+   - Use `&apos;` or `&#39;` for single quotes in text content
+   - Example: ❌ `Click "Add Image" to add` → ✅ `Click &quot;Add Image&quot; to add`
+   - Example: ❌ `Delete "{title}"` → ✅ `Delete &quot;{title}&quot;`
+   - This prevents ESLint `react/no-unescaped-entities` errors
+
+7. **Handle catch blocks properly**
+   - **Remove unused error parameters** from catch blocks
+   - If you don't use the error, omit the parameter: `catch { ... }`
+   - If you need the error, use it: `catch (error) { console.error(error); }`
+   - Example: ❌ `catch (error) { // Error handled elsewhere }` → ✅ `catch { // Error handled elsewhere }`
+   - This prevents ESLint `@typescript-eslint/no-unused-vars` errors
+
+8. **Next.js Image optimization**
+   - **Always add `sizes` prop when using `fill` attribute**
+   - Specify responsive sizes for different breakpoints
+   - Example:
+     ```tsx
+     <Image
+       src={url}
+       alt="Description"
+       fill
+       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+     />
+     ```
+   - This improves page performance and prevents Next.js warnings
+
+9. **Create new files for new features**
    - Better to add a new component than modify existing
    - Keeps changes isolated and safe
    - Easier to revert if needed
 
-6. **Check reusable components before creating**
-   - Read `docs/guides/reusable-components-reference.md`
-   - Reuse existing UI components (Button, Card, Badge)
-   - Use Lucide icons from `lucide-react` package
+10. **Check reusable components before creating**
+
+- Read `docs/guides/reusable-components-reference.md`
+- Reuse existing UI components (Button, Card, Badge)
+- Use Lucide icons from `lucide-react` package
 
 ---
 
@@ -191,7 +242,91 @@ Stop and reconsider if you're doing any of these:
 
 ---
 
-## 🖼️ Next.js Image Configuration (Prevention)
+## � ESLint Rules & Standards
+
+**⚠️ REQUIRED:** All code must pass ESLint checks before committing
+
+### Run ESLint Before Committing:
+
+```bash
+npm run lint        # Check for errors
+npm run format      # Auto-format code
+npm run ci          # Run all checks (format, lint, typecheck)
+```
+
+### Common ESLint Errors & Solutions:
+
+#### 1. **react/no-unescaped-entities**
+
+```tsx
+// ❌ Error: Unescaped entity
+<p>Click "Add" to continue</p>
+
+// ✅ Fixed: Escape with HTML entity
+<p>Click &quot;Add&quot; to continue</p>
+```
+
+#### 2. **@typescript-eslint/no-unused-vars**
+
+```tsx
+// ❌ Error: Unused variable
+catch (error) {
+  // Comment only, error not used
+}
+
+// ✅ Fixed: Remove unused parameter
+catch {
+  // Comment only
+}
+
+// ✅ Or use the error
+catch (error) {
+  console.error('Failed:', error);
+}
+```
+
+#### 3. **jsx-a11y/label-has-associated-control**
+
+```tsx
+// ❌ Error: Label not associated with control
+<Label>Username</Label>
+<Input id="username" />
+
+// ✅ Fixed: Use htmlFor to associate
+<Label htmlFor="username">Username</Label>
+<Input id="username" name="username" />
+```
+
+#### 4. **Form field without name attribute**
+
+```tsx
+// ❌ Warning: Missing name attribute
+<Input id="email" />
+
+// ✅ Fixed: Add name attribute
+<Input id="email" name="email" />
+```
+
+### ESLint Configuration
+
+The project uses Next.js ESLint config with TypeScript support:
+
+- `next/core-web-vitals` - Core web vitals rules
+- `next/typescript` - TypeScript specific rules
+- `react/no-unescaped-entities` - Enforces escaped entities in JSX
+- `@typescript-eslint/no-unused-vars` - Prevents unused variables
+
+**Location:** `apps/web/eslint.config.mjs`
+
+### Zero Tolerance Policy
+
+- **All ESLint errors must be fixed** before committing
+- **All ESLint warnings should be addressed** (warnings may be ignored with justification)
+- **Run `npm run ci` before pushing** to catch issues early
+
+---
+
+## �🖼️ Next.js Image Configuration (Prevention)
 
 **⚠️ PROACTIVE CHECK:** When implementing features with external images
 
