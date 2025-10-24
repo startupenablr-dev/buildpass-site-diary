@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.ufs.sh', // UploadThing CDN (new format with dynamic subdomains)
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };

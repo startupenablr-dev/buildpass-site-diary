@@ -12,6 +12,46 @@ import {
 import { GraphQLError } from 'graphql';
 import type { Int } from 'grats';
 import { nanoid } from 'nanoid';
+import { UTApi } from 'uploadthing/server';
+
+const utapi = new UTApi();
+
+/**
+ * Delete images from UploadThing CDN
+ * Called when diary entries are deleted to clean up orphaned files
+ */
+async function deleteUploadThingImages(urls: string[]): Promise<void> {
+  const fileKeys: string[] = [];
+
+  for (const url of urls) {
+    // Support both CDN formats: utfs.io and *.ufs.sh
+    if (
+      (url.includes('utfs.io') || url.includes('ufs.sh')) &&
+      url.includes('/f/')
+    ) {
+      const parts = url.split('/f/');
+      let fileKey = parts[parts.length - 1];
+
+      if (fileKey?.includes('?')) {
+        fileKey = fileKey.split('?')[0];
+      }
+
+      if (fileKey) {
+        fileKeys.push(fileKey);
+      }
+    }
+  }
+
+  if (fileKeys.length > 0) {
+    try {
+      await utapi.deleteFiles(fileKeys);
+      console.log('Deleted UploadThing files:', fileKeys);
+    } catch (error) {
+      console.error('Failed to delete UploadThing files:', error);
+      // Don't throw - still delete diary even if file deletion fails
+    }
+  }
+}
 
 /** @gqlInput */
 interface WeatherInput {
@@ -79,11 +119,18 @@ export function updateSiteDiary(
 }
 
 /** @gqlMutationField */
-export function deleteSiteDiary(id: string): boolean {
+export async function deleteSiteDiary(id: string): Promise<boolean> {
   const index = siteDiaries.findIndex((diary) => diary.id === id);
 
   if (index === -1) {
     return false;
+  }
+
+  const diary = siteDiaries[index];
+
+  // Delete associated images from UploadThing before deleting the diary
+  if (diary.attachments && diary.attachments.length > 0) {
+    await deleteUploadThingImages(diary.attachments);
   }
 
   siteDiaries.splice(index, 1);

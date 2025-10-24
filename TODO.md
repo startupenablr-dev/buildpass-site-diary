@@ -127,45 +127,47 @@ This guide contains:
 
 ### 2. Real Image Upload Service Integration
 
-**Status**: Not started (currently URL-based only)  
+**Status**: ✅ **COMPLETED** (October 24, 2025)  
 **Impact**: Medium - Improves user experience significantly  
-**Effort**: Medium (~3-4 hours)
+**Implementation**: UploadThing integration with drag & drop
 
-#### Option A: UploadThing (Recommended in Assessment)
+#### ✅ Completed Tasks:
 
-- [ ] Sign up for UploadThing account
-- [ ] Install UploadThing packages
-  ```bash
-  yarn add uploadthing @uploadthing/react
-  ```
-- [ ] Create UploadThing API route (`src/app/api/uploadthing/route.ts`)
-- [ ] Configure UploadThing with API keys
-- [ ] Update `ImageUploader` component
-  - Replace URL input with file upload UI
-  - Add drag-and-drop support
-  - Show upload progress
-  - Display image previews
-- [ ] Add image compression before upload
-- [ ] Handle upload errors gracefully
-- [ ] Test on mobile devices (camera integration)
+- [x] Sign up for UploadThing account
+- [x] Install UploadThing packages (`uploadthing`, `@uploadthing/react`)
+- [x] Create UploadThing API route (`src/app/api/uploadthing/core.ts` and `route.ts`)
+- [x] Configure UploadThing file router
+- [x] Update `ImageUploader` component with file upload UI
+- [x] Add drag-and-drop support
+- [x] Show upload progress indicator
+- [x] Display image previews
+- [x] Handle upload errors gracefully
+- [x] Update Next.js config for UploadThing CDN
+- [x] Document setup and usage
 
-#### Option B: AWS S3 or Cloudinary
+#### 📚 Documentation Created:
 
-- [ ] Set up cloud storage account
-- [ ] Create upload API endpoint
-- [ ] Implement signed URLs for secure uploads
-- [ ] Update image uploader component
-- [ ] Add image optimization
+- `docs/guides/uploadthing-integration.md` - Complete implementation guide
+- `docs/analysis/uploadthing-implementation-summary.md` - Quick reference
+- `CLAUDE.md` - Updated with UploadThing setup instructions
 
-**Files to Modify**:
+#### 🚀 Setup Required:
 
-- `apps/web/src/components/site-diary/image-uploader.tsx`
-- `apps/web/src/app/api/uploadthing/route.ts` (new)
+To use the upload feature, you need to:
 
-**Resources**:
+1. Sign up at [uploadthing.com](https://uploadthing.com)
+2. Get your API token from dashboard
+3. Add `UPLOADTHING_TOKEN=your-token` to `apps/web/.env.local`
+4. Restart dev server
 
-- UploadThing: https://uploadthing.com/
-- UploadThing Docs: https://docs.uploadthing.com/
+See `CLAUDE.md` or `docs/guides/uploadthing-integration.md` for details.
+
+#### 🔮 Future Enhancements:
+
+- [ ] Add client-side image compression before upload
+- [ ] Implement file deletion API
+- [ ] Mobile camera integration
+- [ ] Image cropping/editing
 
 ---
 

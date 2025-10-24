@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { SITE_DIARY, UPDATE_SITE_DIARY } from '@/graphql/queries';
+import { useUploadThing } from '@/lib/uploadthing';
 import {
   SiteDiaryQuery,
   SiteDiaryQueryVariables,
@@ -50,9 +51,12 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
     attendees: diary?.attendees?.join(', ') || '',
     images: diary?.attachments || [],
   });
+  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+  const [isUploading, setIsUploading] = React.useState(false);
 
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [updateDiary, { loading }] = useMutation(UPDATE_SITE_DIARY);
+  const { startUpload } = useUploadThing('imageUploader');
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -81,6 +85,25 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
     }
 
     try {
+      setIsUploading(true);
+
+      // Upload files first if any are selected
+      let uploadedUrls: string[] = [...formData.images];
+      if (selectedFiles.length > 0) {
+        const uploadResult = await startUpload(selectedFiles);
+        if (uploadResult) {
+          // The uploadResult contains the file data with the URL
+          uploadedUrls = [
+            ...uploadedUrls,
+            ...uploadResult.map((file) => {
+              // Use ufsUrl (v9) or fall back to url (v7/v8)
+              // @ts-expect-error - UploadThing types are in flux between v7 and v9
+              return file.ufsUrl || file.fileUrl;
+            }),
+          ];
+        }
+      }
+
       // Parse attendees from comma-separated string
       const attendeesList = formData.attendees
         .split(',')
@@ -106,8 +129,7 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
             content: formData.content || undefined,
             weather,
             attendees: attendeesList.length > 0 ? attendeesList : undefined,
-            attachments:
-              formData.images.length > 0 ? formData.images : undefined,
+            attachments: uploadedUrls.length > 0 ? uploadedUrls : undefined,
           },
         },
         refetchQueries: [{ query: SITE_DIARY, variables: { id } }],
@@ -118,6 +140,8 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
     } catch (error) {
       console.error('Failed to update diary:', error);
       setErrors({ submit: 'Failed to update diary. Please try again.' });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -250,9 +274,10 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
         <ImageUploader
           images={formData.images}
           onChange={(images) => setFormData({ ...formData, images })}
+          onFilesSelected={setSelectedFiles}
         />
         <p className="text-muted-foreground mt-2 text-sm">
-          Optional: Add site photos by entering image URLs.
+          Optional: Select photos to upload with this diary entry.
         </p>
       </div>
 
@@ -267,10 +292,14 @@ export const DiaryEditForm: React.FC<DiaryEditFormProps> = ({ id }) => {
       <div className="flex flex-col gap-3 pt-4 sm:flex-row">
         <Button
           type="submit"
-          disabled={loading}
+          disabled={loading || isUploading}
           className="h-11 w-full px-6 sm:w-auto"
         >
-          {loading ? 'Updating...' : 'Update Diary Entry'}
+          {isUploading
+            ? 'Uploading images...'
+            : loading
+              ? 'Updating...'
+              : 'Update Diary Entry'}
         </Button>
         <Button
           type="button"

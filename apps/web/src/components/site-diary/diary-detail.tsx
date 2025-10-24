@@ -179,6 +179,7 @@ export const DiaryDetail: React.FC<DiaryDetailProps> = ({ id }) => {
                       fill
                       className="object-cover transition-transform duration-200 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority={index === 0}
                     />
                   </div>
                 ))}

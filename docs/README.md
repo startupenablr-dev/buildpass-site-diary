@@ -22,6 +22,7 @@
 
 - [Site Diary Pages Implementation](./guides/site-diary-pages-implementation.md) - Page structure
 - [Update/Delete Implementation](./guides/update-delete-implementation.md) - CRUD operations
+- [UploadThing Integration](./guides/uploadthing-integration.md) - File upload setup ✅
 - [API Endpoints Reference](./guides/api-endpoints-reference.md) - GraphQL API
 
 ### 📋 Project Management
@@ -106,6 +107,7 @@ docs/
 │   ├── backend-coding-patterns.md
 │   ├── reusable-components-reference.md
 │   ├── ai-openai-integration.md
+│   ├── uploadthing-integration.md  ✅ File upload
 │   ├── error-handling-reference.md
 │   ├── preloadquery-dynamic-rendering.md
 │   ├── site-diary-pages-implementation.md
@@ -239,5 +241,5 @@ When adding new patterns or components:
 
 ## Version
 
-Last Updated: October 23, 2025
-Documentation Version: 3.0
+Last Updated: October 24, 2025
+Documentation Version: 3.1

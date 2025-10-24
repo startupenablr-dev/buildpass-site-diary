@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useUploadThing } from '@/lib/uploadthing';
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useRouter } from 'next/navigation';
@@ -53,9 +54,12 @@ export const DiaryForm: React.FC = () => {
     attendees: '',
     images: [],
   });
+  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+  const [isUploading, setIsUploading] = React.useState(false);
 
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [createDiary, { loading }] = useMutation(CREATE_SITE_DIARY);
+  const { startUpload } = useUploadThing('imageUploader');
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -84,6 +88,23 @@ export const DiaryForm: React.FC = () => {
     }
 
     try {
+      setIsUploading(true);
+
+      // Upload new files to UploadThing CDN before creating diary
+      let uploadedUrls: string[] = [...formData.images];
+      if (selectedFiles.length > 0) {
+        const uploadResult = await startUpload(selectedFiles);
+        if (uploadResult) {
+          uploadedUrls = [
+            ...uploadedUrls,
+            ...uploadResult.map((file) => {
+              // @ts-expect-error - UploadThing v9 uses ufsUrl, v7/v8 uses fileUrl
+              return file.ufsUrl || file.fileUrl;
+            }),
+          ];
+        }
+      }
+
       // Parse attendees from comma-separated string
       const attendeesList = formData.attendees
         .split(',')
@@ -108,8 +129,7 @@ export const DiaryForm: React.FC = () => {
             content: formData.content || undefined,
             weather,
             attendees: attendeesList.length > 0 ? attendeesList : undefined,
-            attachments:
-              formData.images.length > 0 ? formData.images : undefined,
+            attachments: uploadedUrls.length > 0 ? uploadedUrls : undefined,
           },
         },
       });
@@ -119,6 +139,8 @@ export const DiaryForm: React.FC = () => {
     } catch (error) {
       console.error('Failed to create diary:', error);
       setErrors({ submit: 'Failed to create diary. Please try again.' });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -243,9 +265,10 @@ export const DiaryForm: React.FC = () => {
         <ImageUploader
           images={formData.images}
           onChange={(images) => setFormData({ ...formData, images })}
+          onFilesSelected={setSelectedFiles}
         />
         <p className="text-muted-foreground mt-2 text-sm">
-          Optional: Add site photos by entering image URLs.
+          Optional: Select photos to upload with this diary entry.
         </p>
       </div>
 
@@ -260,10 +283,14 @@ export const DiaryForm: React.FC = () => {
       <div className="flex flex-col gap-3 pt-4 sm:flex-row">
         <Button
           type="submit"
-          disabled={loading}
+          disabled={loading || isUploading}
           className="h-11 w-full px-6 sm:w-auto"
         >
-          {loading ? 'Creating...' : 'Create Diary Entry'}
+          {isUploading
+            ? 'Uploading images...'
+            : loading
+              ? 'Creating...'
+              : 'Create Diary Entry'}
         </Button>
         <Button
           type="button"

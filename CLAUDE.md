@@ -338,6 +338,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'utfs.io', // UploadThing CDN
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
@@ -358,3 +364,92 @@ const nextConfig: NextConfig = {
 4. Document any new image sources in this file
 
 This prevents runtime errors when users view pages with external images.
+
+---
+
+## UploadThing File Upload Integration
+
+**Status:** ✅ Configured (as of October 24, 2025)
+
+This project uses [UploadThing](https://uploadthing.com) for handling file uploads in site diary entries.
+
+### Initial Setup (One-Time)
+
+1. **Sign up for UploadThing account**: Visit [uploadthing.com](https://uploadthing.com)
+2. **Create an app** in the UploadThing dashboard
+3. **Get your secret token** from Settings → API Keys
+4. **Add token to environment variables**:
+
+```bash
+# apps/web/.env.local
+UPLOADTHING_SECRET=your-secret-token-here
+```
+
+5. **Restart the dev server** for environment changes to take effect
+
+### Architecture
+
+**Files involved:**
+
+- `apps/web/src/app/api/uploadthing/core.ts` - Upload configuration & file router
+- `apps/web/src/app/api/uploadthing/route.ts` - Next.js API route handler
+- `apps/web/src/lib/uploadthing.ts` - Client-side upload components
+- `apps/web/src/components/site-diary/image-uploader.tsx` - Upload UI component
+- `apps/web/next.config.ts` - CDN hostname configuration
+
+**How it works:**
+
+1. User drags/drops or selects images in the ImageUploader component
+2. Files are uploaded directly to UploadThing's CDN
+3. UploadThing returns URLs for the uploaded files
+4. URLs are stored in the site diary `attachments` array
+5. Images are served from `utfs.io` CDN (fast, globally distributed)
+
+### Configuration
+
+**Upload limits** (configured in `core.ts`):
+
+- Max file size: 4MB per image
+- Max files per upload: 5 images
+- Allowed file types: Images only (jpg, png, gif, webp)
+
+**To modify limits:**
+
+```typescript
+// apps/web/src/app/api/uploadthing/core.ts
+imageUploader: f({
+  image: {
+    maxFileSize: '8MB', // Increase to 8MB
+    maxFileCount: 10, // Allow 10 images
+  },
+});
+```
+
+### Troubleshooting
+
+**"Upload failed" error:**
+
+- Check that `UPLOADTHING_TOKEN` is set in `.env.local`
+- Verify token is correct in UploadThing dashboard
+- Ensure dev server was restarted after adding token
+
+**Images not displaying:**
+
+- Check that `utfs.io` is in `next.config.ts` remotePatterns
+- Verify image URLs start with `https://utfs.io/`
+- Check browser console for CORS or CSP errors
+
+**File size errors:**
+
+- Default max is 4MB per image
+- Users should compress large images before upload
+- Consider increasing `maxFileSize` if needed
+
+### Development Notes
+
+- UploadThing provides automatic image optimization
+- Files are stored permanently (no expiration by default)
+- Delete functionality requires additional UploadThing API calls (not implemented)
+- For production, consider implementing file cleanup/garbage collection
+
+---
