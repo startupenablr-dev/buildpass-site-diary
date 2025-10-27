@@ -144,6 +144,7 @@ This approach means a new developer can:
 - **AI-Powered Site Diary Summaries**: Integrated OpenAI to generate summaries of site diaries
   - Implemented rate limiting to control API usage
   - Added safeguards and error handling
+  - Centralised summary orchestration in `generateDiarySummary()` so REST and GraphQL stay DRY and consistent
   - Token management to optimize costs
 - **Current Backend**: In-memory data store for rapid prototyping
 - **GraphQL API**: Code-first approach using Grats for type-safe schema generation

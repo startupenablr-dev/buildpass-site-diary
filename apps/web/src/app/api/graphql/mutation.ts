@@ -1,14 +1,7 @@
 import { siteDiaries, SiteDiary, Weather } from '@/data/site-diary';
-import { createGraphQLError, graphQLErrorFrom } from '@/lib/errors';
-import {
-  beautifyText,
-  isOpenAIConfigured,
-  summarizeSiteDiaries as summarizeDiariesWithAI,
-} from '@/lib/openai';
-import {
-  buildEmptySummaryMessage,
-  selectDiariesForSummary,
-} from '@/lib/site-diary-summary';
+import { graphQLErrorFrom } from '@/lib/errors';
+import { assertOpenAIConfigured, beautifyText } from '@/lib/openai';
+import { generateDiarySummary } from '@/lib/site-diary-summary';
 import { GraphQLError } from 'graphql';
 import type { Int } from 'grats';
 import { nanoid } from 'nanoid';
@@ -170,50 +163,18 @@ export async function summarizeSiteDiaries(
   endDate: string,
   limit?: Int | null,
 ): Promise<AISummaryResult> {
-  // Check if OpenAI is configured
-  if (!isOpenAIConfigured()) {
-    throw createGraphQLError(
-      'OpenAI API key is not configured. Please add OPENAI_API_KEY to your .env file.',
-      {
-        code: 'OPENAI_NOT_CONFIGURED',
-        status: 503,
-      },
-    );
-  }
-  const normalizedLimit = typeof limit === 'number' ? limit : null;
-  const {
-    diaries,
-    startDate: normalizedStartDate,
-    endDate: normalizedEndDate,
-  } = selectDiariesForSummary({
-    startDate,
-    endDate,
-    limit: normalizedLimit ?? undefined,
-  });
-
-  if (diaries.length === 0) {
-    return {
-      summary: buildEmptySummaryMessage({
-        diaries,
-        startDate: normalizedStartDate,
-        endDate: normalizedEndDate,
-        limit: normalizedLimit,
-      }),
-      diariesCount: 0,
-      startDate: normalizedStartDate,
-      endDate: normalizedEndDate,
-    };
-  }
-
-  // Generate AI summary
   try {
-    const summary = await summarizeDiariesWithAI(diaries);
+    const result = await generateDiarySummary({
+      startDate,
+      endDate,
+      limit: typeof limit === 'number' ? limit : undefined,
+    });
 
     return {
-      summary,
-      diariesCount: diaries.length,
-      startDate: normalizedStartDate,
-      endDate: normalizedEndDate,
+      summary: result.summary,
+      diariesCount: result.diariesCount,
+      startDate: result.startDate,
+      endDate: result.endDate,
     };
   } catch (error) {
     if (error instanceof GraphQLError) {
@@ -235,28 +196,17 @@ export async function summarizeSiteDiaries(
 export async function beautifyTextMutation(
   text: string,
 ): Promise<AIBeautifyResult> {
-  // Check if OpenAI is configured
-  if (!isOpenAIConfigured()) {
-    throw createGraphQLError(
-      'OpenAI is not configured. Please set OPENAI_API_KEY in your .env.local file.',
-      {
-        code: 'OPENAI_NOT_CONFIGURED',
-        status: 503,
-      },
-    );
-  }
-
-  // Validate input
-  if (!text || text.trim().length === 0) {
-    return {
-      originalText: text,
-      beautifiedText: text,
-      enhanced: false,
-    };
-  }
-
-  // Enhance text with AI
   try {
+    assertOpenAIConfigured();
+
+    if (!text || text.trim().length === 0) {
+      return {
+        originalText: text,
+        beautifiedText: text,
+        enhanced: false,
+      };
+    }
+
     const beautifiedText = await beautifyText(text);
 
     return {

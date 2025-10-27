@@ -1,6 +1,6 @@
 # OpenAI Integration & Rate Limiting Guide
 
-> Updated: October 23, 2025
+> Updated: October 27, 2025
 
 This guide documents the AI capabilities that power the Site Diary experience, how they are wired into our stack, and the rate limiting guardrails that keep OpenAI usage safe and cost-effective. It consolidates the previous AI feature notes, rate limiting write-ups, and refactor summaries into a single reference.
 
@@ -8,11 +8,11 @@ This guide documents the AI capabilities that power the Site Diary experience, h
 
 ## Features at a Glance
 
-| Capability              | What It Does                                                                                           | Key Entry Points                                                                                               |
-| ----------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| **Diary summarisation** | Generates structured insights across multiple diary entries, optionally capped to the most recent set. | `summarizeSiteDiaries` GraphQL mutation, `POST /api/ai/summarize`, `summarizeSiteDiaries()` in `lib/openai.ts` |
-| **Text beautification** | Polishes free-form notes into professional copy while keeping the original intent.                     | `beautifyTextMutation` GraphQL mutation, `POST /api/ai/beautify`, `beautifyText()` in `lib/openai.ts`          |
-| **Rate limit feedback** | Prevents API spam and surfaces a countdown so users know when they can retry.                          | `checkRateLimit()` in `lib/openai.ts`, `AISummaryWidget` countdown UI                                          |
+| Capability              | What It Does                                                                                           | Key Entry Points                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| **Diary summarisation** | Generates structured insights across multiple diary entries, optionally capped to the most recent set. | `generateDiarySummary()` service, `summarizeSiteDiaries` GraphQL mutation, `POST /api/ai/summarize`                  |
+| **Text beautification** | Polishes free-form notes into professional copy while keeping the original intent.                     | `beautifyTextMutation` GraphQL mutation, `POST /api/ai/beautify`, `beautifyText()` in `lib/openai.ts` (backend only) |
+| **Rate limit feedback** | Prevents API spam and surfaces a countdown so users know when they can retry.                          | `checkRateLimit()` + `assertOpenAIConfigured()` in `lib/openai.ts`, `AISummaryWidget` countdown UI                   |
 
 ---
 
@@ -38,7 +38,7 @@ This guide documents the AI capabilities that power the Site Diary experience, h
    yarn workspace @untitled/web codegen
    ```
 
-`lib/openai.ts` exposes `isOpenAIConfigured()` and `getOpenAIStatus()` helpers that are used by both REST and GraphQL layers to block requests when the key is missing.
+`lib/openai.ts` exposes `assertOpenAIConfigured()`, `isOpenAIConfigured()`, and `getOpenAIStatus()` helpers. Upstream layers call the assertion helper so configuration failures surface with consistent error codes.
 
 ---
 
@@ -46,21 +46,21 @@ This guide documents the AI capabilities that power the Site Diary experience, h
 
 ### Core Services
 
-| File                                                 | Purpose                                                                                                                        |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `apps/web/src/lib/openai.ts`                         | Initializes the OpenAI client, applies rate limiting, and exposes `summarizeSiteDiaries()` & `beautifyText()` utilities.       |
-| `apps/web/src/lib/site-diary-summary.ts`             | Normalises diary selection, supporting both date-range filtering and "most recent N" mode while returning consistent metadata. |
-| `apps/web/src/lib/errors.ts` & `lib/api-response.ts` | Normalise errors for GraphQL and REST, ensuring consistent status codes and payloads.                                          |
+| File                                                 | Purpose                                                                                                                                      |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apps/web/src/lib/openai.ts`                         | Initializes the OpenAI client, applies rate limiting, exports `assertOpenAIConfigured()`, and contains the low-level OpenAI request helpers. |
+| `apps/web/src/lib/site-diary-summary.ts`             | Normalises diary selection and now exposes `generateDiarySummary()` so REST/GraphQL share a single implementation and stay DRY.              |
+| `apps/web/src/lib/errors.ts` & `lib/api-response.ts` | Normalise errors for GraphQL and REST, ensuring consistent status codes and payloads.                                                        |
 
 ### GraphQL Surface
 
 - **Schema additions** live in `apps/web/src/app/api/graphql/mutation.ts` with JSDoc annotations for Grats.
-- `summarizeSiteDiaries` accepts `startDate`, `endDate`, and optional `limit`; it funnels selection through `selectDiariesForSummary()` before hitting OpenAI.
+- `summarizeSiteDiaries` accepts `startDate`, `endDate`, and optional `limit` and now delegates to `generateDiarySummary()` for selection, validation, and AI calls.
 - `beautifyTextMutation` validates blank input, reuses `beautifyText()`, and maps errors through `graphQLErrorFrom()` for rich metadata.
 
 ### REST Surface
 
-- `POST /api/ai/summarize` mirrors the GraphQL mutation, first defaulting missing dates (last 7 days), then calling `selectDiariesForSummary()`.
+- `POST /api/ai/summarize` mirrors the GraphQL mutation, first defaulting missing dates (last 7 days), then handing control to `generateDiarySummary()`.
 - `POST /api/ai/beautify` validates the request body and short-circuits empty strings.
 - All REST handlers respond via `createSuccessResponse()` / `createErrorResponse()` to keep HTTP payloads predictable.
 
@@ -127,8 +127,8 @@ All OpenAI errors surface as `AppError` instances, which means GraphQL extension
 
 ## Maintenance Tips
 
-- Keep `lib/openai.ts` the single source of truth for rate limiting and OpenAI configuration to avoid divergence.
-- Centralised diary selection lives in `lib/site-diary-summary.ts`; reuse it for any new summary-like features to stay DRY.
+- Keep `lib/openai.ts` the single source of truth for rate limiting and OpenAI configuration (`assertOpenAIConfigured()` in particular) to avoid divergence.
+- Centralised diary selection and summarisation live in `lib/site-diary-summary.ts`; reuse `generateDiarySummary()` for any new features that need diary insights to stay DRY.
 - Whenever you move beyond in-memory rate limiting, extract the logic behind an interface so it can swap between memory, Redis, or another provider.
 - Document any new AI flow additions in this file to keep future diff reviews tidy.
 

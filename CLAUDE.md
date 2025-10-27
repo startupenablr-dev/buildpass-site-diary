@@ -28,6 +28,7 @@
 3. **Only refactor when explicitly requested** in the prompt
 4. **Always check guides first** before implementing anything
 5. **Test incrementally** - verify each small change before proceeding
+6. **Follow DRY (Don't Repeat Yourself)** - factor shared logic into helpers instead of copying code
 
 ### ✅ Before Any Change
 

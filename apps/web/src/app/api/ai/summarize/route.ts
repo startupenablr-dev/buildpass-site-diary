@@ -3,11 +3,7 @@ import {
   createErrorResponseFrom,
   createSuccessResponse,
 } from '@/lib/api-response';
-import { isOpenAIConfigured, summarizeSiteDiaries } from '@/lib/openai';
-import {
-  buildEmptySummaryMessage,
-  selectDiariesForSummary,
-} from '@/lib/site-diary-summary';
+import { generateDiarySummary } from '@/lib/site-diary-summary';
 import type { NextRequest } from 'next/server';
 
 /**
@@ -33,16 +29,6 @@ import type { NextRequest } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Check if OpenAI is configured
-    if (!isOpenAIConfigured()) {
-      return createErrorResponse({
-        code: 'OPENAI_NOT_CONFIGURED',
-        message:
-          'Please set OPENAI_API_KEY in your .env.local file to use AI features.',
-        status: 503,
-      });
-    }
-
     const body = await request.json();
 
     if (!body || typeof body !== 'object') {
@@ -66,40 +52,35 @@ export async function POST(request: NextRequest) {
         .toISOString()
         .split('T')[0];
 
-    const {
-      diaries,
-      startDate: normalizedStart,
-      endDate: normalizedEnd,
-    } = selectDiariesForSummary({ startDate: start, endDate: end });
+    const summaryResult = await generateDiarySummary({
+      startDate: start,
+      endDate: end,
+    });
 
-    if (diaries.length === 0) {
+    if (summaryResult.status === 'empty') {
       return createErrorResponse({
         code: 'SITE_DIARY_NOT_FOUND',
         message: 'No site diaries found for the requested period.',
         status: 404,
         details: {
-          dateRange: { startDate: normalizedStart, endDate: normalizedEnd },
-          diariesCount: 0,
-          helpText: buildEmptySummaryMessage({
-            diaries: [],
-            startDate: normalizedStart,
-            endDate: normalizedEnd,
-            limit: null,
-          }),
+          dateRange: {
+            startDate: summaryResult.startDate,
+            endDate: summaryResult.endDate,
+          },
+          diariesCount: summaryResult.diariesCount,
+          limit: summaryResult.limit,
+          helpText: summaryResult.helpText,
         },
       });
     }
 
-    // Generate AI summary
-    const summary = await summarizeSiteDiaries(diaries);
-
     return createSuccessResponse(
       {
-        summary,
-        diariesCount: diaries.length,
+        summary: summaryResult.summary,
+        diariesCount: summaryResult.diariesCount,
         dateRange: {
-          startDate: normalizedStart,
-          endDate: normalizedEnd,
+          startDate: summaryResult.startDate,
+          endDate: summaryResult.endDate,
         },
       },
       'Summary generated successfully',

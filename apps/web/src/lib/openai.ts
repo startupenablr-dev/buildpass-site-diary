@@ -198,6 +198,8 @@ Use clear formatting with line breaks between sections. Keep it professional and
  * @returns Promise<string> - Enhanced, professional text
  */
 export async function beautifyText(text: string): Promise<string> {
+  // TODO(buildpass): Surface this beautify service through a polished UI flow.
+  // For now we keep the backend hook ready so future clients can plug in without re-writing logic.
   // Check rate limit before processing
   checkRateLimit('beautify');
 
@@ -310,4 +312,19 @@ export function getOpenAIStatus() {
       ? 'OpenAI is properly configured'
       : 'OpenAI API key is not configured. Please set OPENAI_API_KEY in your .env.local file',
   };
+}
+
+/**
+ * Assert OpenAI configuration is present before servicing AI requests.
+ * Throws an AppError that upstream layers can convert into HTTP/GraphQL errors.
+ */
+export function assertOpenAIConfigured(): void {
+  if (!isOpenAIConfigured()) {
+    throw new AppError({
+      code: 'OPENAI_NOT_CONFIGURED',
+      message:
+        'OpenAI API key is not configured. Please add OPENAI_API_KEY to your environment.',
+      status: 503,
+    });
+  }
 }

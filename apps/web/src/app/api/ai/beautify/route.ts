@@ -3,7 +3,7 @@ import {
   createErrorResponseFrom,
   createSuccessResponse,
 } from '@/lib/api-response';
-import { beautifyText, isOpenAIConfigured } from '@/lib/openai';
+import { assertOpenAIConfigured, beautifyText } from '@/lib/openai';
 import type { NextRequest } from 'next/server';
 
 /**
@@ -25,15 +25,7 @@ import type { NextRequest } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Check if OpenAI is configured
-    if (!isOpenAIConfigured()) {
-      return createErrorResponse({
-        code: 'OPENAI_NOT_CONFIGURED',
-        message:
-          'Please set OPENAI_API_KEY in your .env.local file to use AI features.',
-        status: 503,
-      });
-    }
+    assertOpenAIConfigured();
 
     const body = await request.json();
     const { text } = body;
